@@ -1,0 +1,62 @@
+o<helical_plunge> sub
+	; o<helical_plunge> call [x][y] [diameter] [zs][ze] [mode]
+	;                        [1][2]    [3]     [4] [5]   [6]
+
+	#<M_CONVENTIONAL> = [FIX[#9/1] MOD 2 EQ 1]
+	#<M_BOTHWAYS>     = [FIX[#9/2] MOD 2 EQ 1]
+	#<M_PLUNGE>       = [FIX[#9/4] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#9/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#9/1] MOD 2 EQ 0]
+	#<M_ONEWAY>       = [FIX[#9/2] MOD 2 EQ 0]
+	#<M_HELIX>        = [FIX[#9/4] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#9/8] MOD 2 EQ 0]
+
+	G90	  ; absolute x,y,z
+	G90.1 ; absolute i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<td> = #<_td>
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #4
+	o1 endif
+	o2 if [EXISTS[#<_rampang>]]
+		#<rampang> = #<_rampang>
+	o2 else
+		#<rampang> = 5 ; degrees
+	o2 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o3 else
+		#<stepover> = [#<td>*0.4]
+	o3 endif
+
+	#<r> = [#<td>*0.3]
+	o115 if [[[#3-#<td>]/2] LE #<r>]
+		#<r> = [[[#3-#<td>]/2]*0.8]
+	o115 endif
+
+	#<z_step>  = [#<r>*2*3.14*TAN[#<rampang>]]
+
+	G0 Z#<z_clearance>
+
+	#<z_total> = [#4-#5]
+	#<turns>   = [#<z_total>/#<z_step>] ; subtract off an epsilon fixes some things...
+
+	#<a> = [[#<turns> MOD 1.0]*360]
+
+	o103 if [#<M_CLIMB>]
+		G0 X[#1+COS[-#<a>]*#<r>] Y[#2+SIN[-#<a>]*#<r>]
+		G0 Z#4
+		G3 X[#1+#<r>] Y[#2] I[#1] J[#2] Z[#5] P[FUP[#<turns>]]
+
+	o103 else
+		G0 X[#1+COS[-#<a>]*#<r>] Y[#2-SIN[-#<a>]*#<r>]
+		G0 Z#4
+		G2 X[#1+#<r>] Y[#2] I[#1] J[#2] Z[#5] P[FUP[#<turns>]]
+		
+	o103 endif
+
+o<helical_plunge> endsub

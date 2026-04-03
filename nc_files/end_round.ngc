@@ -1,0 +1,146 @@
+o<end_round> sub
+	; o<cope_angle> call [side] [x][y] [r] [ztop][zbot] [fincut] [mode]
+
+	; right now only 0 and 2 work but hey that's most of what you'd do
+	; 0: +x side
+	; 1: +y side
+	; 2: -x side
+	; 3: -y side
+
+	;G10 L0 ; re-read tool data
+	G90	  ; absolute x,y,z
+	G90.1 ; absolute i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<M_CONVENTIONAL> = [FIX[#8/1] MOD 2 EQ 1]
+	#<M_BOTHWAYS>     = [FIX[#8/2] MOD 2 EQ 1]
+	#<M_PLUNGE>       = [FIX[#8/4] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#8/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#8/1] MOD 2 EQ 0]
+	#<M_ONEWAY>       = [FIX[#8/2] MOD 2 EQ 0]
+	#<M_HELIX>        = [FIX[#8/4] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#8/8] MOD 2 EQ 0]
+
+
+	#<td> = #<_td>
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #5
+	o1 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o3 else
+		#<stepover> = [#<td>*0.4]
+	o3 endif
+	o4 if [EXISTS[#<_overlap>]]
+		#<overlap> = #<_overlap>
+	o4 else
+		#<overlap> = [#<stepover>*0.4]
+	o4 endif
+
+	G0 Z#<z_clearance>
+
+	#<cs> = +1
+	o10 if [#<M_CLIMB>]
+		#<cs> = -1
+	o10 endif
+
+	#<sectorang> = [45 + #1*#<cs>]
+	o300 while [#<sectorang> GE [-45 + #1*#<cs>]]
+
+		#<l_total> = [SQRT[2]*#4]
+		#<l_steps> = FUP[[#<l_total>-#4-ABS[#7]]/#<stepover>]
+
+		#<r> = [#4 + ABS[#7] + #<tr> + #<l_steps>*#<stepover> + #<stepover>*0.2*SQRT[2]]
+
+		G0 X[#2 + #<r>*COS[#<cs>*#<sectorang>]] Y[#3 + #<r>*SIN[#<cs>*#<sectorang>]]
+		G0 Z#5
+		G1 Z#6
+
+		o200 while [#<l_steps> GE 1]
+			#<r> = [#4 + ABS[#7] + #<tr> + #<l_steps>*#<stepover>]
+			#<a_extra> = [#<overlap>/#<r>*57.3]
+
+			#<a> = [ASIN[[#4 + #<tr>]/#<r>]-45]
+			o201 if [#<a> LT 0]
+				#<a> = 0
+			o201 endif
+
+			#<a> = [#<a> + #<a_extra>]
+			o202 if [#<a> GT 45]
+				#<a> = 45
+			o202 endif
+
+			o205 if [#<M_BOTHWAYS>]
+
+				G1 X[#2 + #<r>*COS[#<cs>*[#<sectorang>-#<a>]]] Y[#3 + #<r>*SIN[#<cs>*[#<sectorang>-#<a>]]]
+				o204 if [#<M_CLIMB>]
+					G2 X[#2 + #<r>*COS[#<cs>*[#<sectorang>+#<a>]]] Y[#3 + #<r>*SIN[#<cs>*[#<sectorang>+#<a>]]] I#2 J#3
+				o204 else
+					G3 X[#2 + #<r>*COS[#<cs>*[#<sectorang>+#<a>]]] Y[#3 + #<r>*SIN[#<cs>*[#<sectorang>+#<a>]]] I#2 J#3
+				o204 endif
+				G0 X[#2 + [#<r>+#<stepover>*0.2]*COS[#<cs>*[#<sectorang>+#<a>]]] Y[#3 + [#<r>+#<stepover>*0.2]*SIN[#<cs>*[#<sectorang>+#<a>]]]
+				#<aa> = [#<a>]
+				o203 while [#<aa> GT -#<a>]
+					G0 X[#2 + [#<r>+#<stepover>*0.2]*COS[#<cs>*[#<sectorang>+#<aa>]]] Y[#3 + [#<r>+#<stepover>*0.2]*SIN[#<cs>*[#<sectorang>+#<aa>]]]; I#2 J#3
+					#<aa> = [#<aa>-1]
+				o203 endwhile
+
+			o205 else
+				o206 if [#<l_steps> MOD 2]
+					#<a> = [-#<a>]
+				o206 endif
+				G1 X[#2 + #<r>*COS[#<cs>*[#<sectorang>-#<a>]]] Y[#3 + #<r>*SIN[#<cs>*[#<sectorang>-#<a>]]]
+				o204 if [#<l_steps> MOD 2 EQ #<M_CLIMB>]
+					G3 X[#2 + #<r>*COS[#<cs>*[#<sectorang>+#<a>]]] Y[#3 + #<r>*SIN[#<cs>*[#<sectorang>+#<a>]]] I#2 J#3
+				o204 else
+					G2 X[#2 + #<r>*COS[#<cs>*[#<sectorang>+#<a>]]] Y[#3 + #<r>*SIN[#<cs>*[#<sectorang>+#<a>]]] I#2 J#3
+				o204 endif
+				
+			o205 endif
+
+			#<l_steps> = [#<l_steps>-1]
+
+		o200 endwhile
+
+		G0 Z#<z_clearance>
+
+		#<sectorang> = [#<sectorang>-90]
+	o300 endwhile
+
+
+	#<r> = [#4 + ABS[#7] + #<tr>]
+
+	G0 X[#2 + #<r>*COS[-90*#<cs> + #1]] Y[#3 + #<r>*SIN[-90*#<cs> + #1]]
+	G0 Z#5
+	G1 Z#6
+	o401 if [#<M_CLIMB>]
+		G2 X[#2 + #<r>*COS[+90*#<cs> + #1]] Y[#3 + #<r>*SIN[+90*#<cs> + #1]] I#2 J#3
+	o401 else
+		G3 X[#2 + #<r>*COS[+90*#<cs> + #1]] Y[#3 + #<r>*SIN[+90*#<cs> + #1]] I#2 J#3
+	o401 endif
+	G0 Z#<z_clearance>
+
+	o400 if [#7 GT 0]
+		#<r> = [#4 + #<tr>]
+
+		G0 X[#2 + #<r>*COS[-90*#<cs> + #1]] Y[#3 + #<r>*SIN[-90*#<cs> + #1]]
+		G0 Z#5
+		G1 Z#6
+		o402 if [#<M_CLIMB>]
+			G2 X[#2 + #<r>*COS[+90*#<cs> + #1]] Y[#3 + #<r>*SIN[+90*#<cs> + #1]] I#2 J#3
+		o402 else
+			G3 X[#2 + #<r>*COS[+90*#<cs> + #1]] Y[#3 + #<r>*SIN[+90*#<cs> + #1]] I#2 J#3
+		o402 endif
+	o400 endif
+	
+
+
+	G0 Z#<z_clearance>
+
+o<end_round> endsub
+
+M2

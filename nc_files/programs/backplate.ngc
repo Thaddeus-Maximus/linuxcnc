@@ -1,0 +1,26 @@
+G10 L1 P1 Z0.0 R0.125 ; set tool P1 to Z-offset Z0.0 and radius R0.25
+T1   ; set tool to T1
+M06  ; manual toolchange
+
+M101 ; enable z-axis
+G90  ; absolute coordinates
+G54  ; fixture #1
+
+F8.0 ; feedrate
+
+
+
+#<w> = 5.75
+#<h> = 7.875
+o<frame_rect> call [-#<w>/2] [-#<h>/2] [#<w>/2] [#<h>/2] [0.05] [-0.28] [3] [0.1]
+
+
+
+;o<pocket_circ> call [0] [+0.75] [12.1/25.4] [0.1] [0.3] [-0.15] [.005] [0]
+;o<pocket_circ> call [0] [-0.75] [12.1/25.4] [0.1] [0.05] [-0.15] [.005] [0]
+;o<pocket_circ> call [-0.75] [0] [12.1/25.4] [0.1] [0.05] [-0.15] [.005] [0]
+;o<pocket_circ> call [+0.75] [0] [12.1/25.4] [0.1] [0.05] [-0.15] [.005] [0]
+
+
+
+M2 ; end program

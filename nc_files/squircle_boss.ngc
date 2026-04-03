@@ -1,0 +1,84 @@
+o<squircle_boss> sub
+	; xc, yc, w, d, zstart, zend, fincut, mode
+	; #1  #2  #3 #4  #5     #6    #7      #8
+	; modes:
+	;  0: climb
+	;  1: conventional
+
+	;G10 L0 ; re-read tool data
+	G90	  ; absolute x,y,z
+	G90.1 ; absolute i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<td> = #<_td>
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #5
+	o1 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = [#<_stepover>*0.8]
+	o3 else
+		#<stepover> = [#<td>*0.4*0.8]
+	o3 endif
+
+	o5 if [#7 EQ 0]
+		#7 = #<stepover>
+	o5 endif
+
+	G0 Z#<z_clearance>
+
+
+	#<dist> = [[#3-#4]/2-#7]
+	#<n_steps> = FIX[#<dist>/#<stepover>]
+	#<n_steps_total> = #<n_steps>
+
+	#<ys> = +1
+	o10 if [#8 EQ 1]
+		#<ys> = -1
+	o10 endif
+
+	G0 X[#1 + #4/2 + #<tr> + #7 + #<n_steps>*#<stepover>] Y[#2 + [#4/2 + #<tr> + #7 + #<n_steps>*#<stepover>]*#<ys>]
+	G0 Z#5
+	G1 Z#6
+	G1 Y#2
+
+	o30 while [#<n_steps> GE 0]
+		#<r> = [#4/2 + #<tr> + #7 + #<n_steps>*#<stepover>]
+		#<pow> = [0.95-#<n_steps>/#<n_steps_total>*0.95]
+
+		#<a> = 0
+		o20 while [[#<n_steps> EQ 0 OR #<a> LE 340] AND #<a> LE 360] ; go to 340 degrees on everything but last round
+			o201 if [#<a> LT 90]
+				G1 X[#1+ABS[COS[#<a>]]**#<pow>*#<r>] Y[#2-ABS[SIN[#<a>]]**#<pow>*#<r>*#<ys>]
+			o201 elseif [#<a> LT 180]
+				G1 X[#1-ABS[COS[#<a>]]**#<pow>*#<r>] Y[#2-ABS[SIN[#<a>]]**#<pow>*#<r>*#<ys>]
+			o201 elseif [#<a> LT 270]
+				G1 X[#1-ABS[COS[#<a>]]**#<pow>*#<r>] Y[#2+ABS[SIN[#<a>]]**#<pow>*#<r>*#<ys>]
+			o201 else
+				G1 X[#1+ABS[COS[#<a>]]**#<pow>*#<r>] Y[#2+ABS[SIN[#<a>]]**#<pow>*#<r>*#<ys>]
+			o201 endif
+			#<a> = [#<a>+1]
+		o20 endwhile
+
+		#<n_steps> = [#<n_steps>-1]
+	o30 endwhile
+
+	G1 X[#1+#4/2+#<tr>] Y[#2]
+
+	o40 if [#8 EQ 1]
+		G2 X[#1+#4/2+#<tr>] Y[#2] I#1 J#2
+	o40 else
+		G3 X[#1+#4/2+#<tr>] Y[#2] I#1 J#2
+	o40 endif
+
+	
+
+	G0 Z#<z_clearance>
+
+
+o<squircle_boss> endsub
+
+M2

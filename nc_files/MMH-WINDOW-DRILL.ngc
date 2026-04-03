@@ -1,0 +1,12 @@
+#<_z_clearance> = 0.200
+#<_z_depth>       = -0.3
+
+M03 ; Start spindle
+F10 ; Feed
+
+o<drill> call [3.25][-0.5] [0.05][-0.35] [0.2]
+o<drill> call [11.875][-0.5] [0.05][-0.35] [0.2]
+
+M05 ; Stop Spindle
+M30 ; End Program
+%

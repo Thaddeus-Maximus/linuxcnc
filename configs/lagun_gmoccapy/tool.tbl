@@ -1,0 +1,6 @@
+T3   P3   D+0.187500 ;3/16in flat 
+T1   P1   D+0.187500 I+7.000000 ;0.201in DrillBit 
+T5   P5   D+0.250000 ;1/4 
+T2   P2   D+0.437500 ;7/16in MillBit 
+T4   P4   D+2.000000 ;2 inch mill Sample Tool 
+T0   P0   ;comment 

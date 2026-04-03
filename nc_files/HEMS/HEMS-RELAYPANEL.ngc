@@ -1,0 +1,36 @@
+#<_z_clearance> = 0.4
+#<_rampang>     = 5
+
+;#<_overlap> = 0
+
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+
+G10 L1 P1 Z0.0 R0.25 ; set tool
+T1   ; set tool to T1
+M06  ; manual toolchange
+G54  ; absolute coordinates
+F10  ; 10 ft/min
+
+#1 = 1
+
+o10 if [#1 EQ 1]
+	o<drill> call [ .325][-.25] [0.1][-0.3]
+	o<drill> call [ .325][-3.0] [0.1][-0.3]
+	o<drill> call [7.675][-3.0] [0.1][-0.3]
+	o<drill> call [7.675][-.25] [0.1][-0.3]
+o10 else if [#1 EQ 2]
+	o<drill> call [1.4][-.75] [0.1][-0.3]
+	o<drill> call [4.0][-.75] [0.1][-0.3]
+	o<drill> call [4.0][-2.5] [0.1][-0.3]
+	o<drill> call [1.4][-2.5] [0.1][-0.3]
+
+	o<drill> call [5.4][-.525] [0.1][-0.3]
+	o<drill> call [6.4][-2.725] [0.1][-0.3]
+o10 endif
+
+
+M2 ; end program

@@ -1,0 +1,55 @@
+;SC-0252
+
+
+#<_z_clearance> = 0.2
+#<_td> = [3/16]
+#<_rampang> = 8
+
+#<x> = 1.05
+#<xe> = 0.600
+#<xs> = 0.075
+
+M03
+G40
+
+G4 P1.5
+
+o10 while [#<x> GT #<xe>]
+	G0 X#<x> Y0 Z#<_z_clearance>
+	G0 Z0.05
+	G1 Z-1.05 F7
+	G0 Z#<_z_clearance>
+	#<x> = [#<x> - #<xs>]	
+o10 endwhile
+
+G0 X#<xe> Y0 Z#<_z_clearance>
+G0 Z0.05
+G1 Z-1.05
+G0 Z#<_z_clearance>
+
+; outline
+
+F12
+G10 L1 P1 R[#<_td>/2]  ; Set tool 1 diameter
+
+G0 X1.25 Y0.25
+G41 D1
+G0 X1.05 Y0.2 Z#<_z_clearance>
+G0 Z-1.05
+G1 X0.95 Y0.105
+G1 X0.6
+G3 Y-.105 R.105
+G1 X0.95
+G1 X1.05 Y-0.2
+G0 Z#<_z_clearance>
+
+G40
+
+;o<helical_plunge> 
+F14
+o<helical_plunge> call [0.197][0] [.262] [0.05][-1.02]
+
+G0 Z#<_z_clearance>
+
+M05
+M30

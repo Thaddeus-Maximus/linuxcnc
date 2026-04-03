@@ -1,0 +1,127 @@
+#<_z_clearance> = 0.4
+#<_rampang>     = 10
+;#<_stepover>    = 2
+
+;#<_overlap> = 0
+
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+
+G20  ; G21 mm, G20 in
+G10 L1 P1 Z0.0 R[3/8/2] ; set tool
+T1   ; set tool to T1
+M06  ; manual toolchange
+G54  ; absolute coordinates
+F20  ; feedrate in mm/min or in/min
+
+#<side> = 2
+
+
+
+; x positions
+#11 = 45
+#12 = 105
+#13 = 165
+#14 = 225
+#15 = 285
+
+; y position
+#20 = 31.5
+
+o<m6cb> sub
+	o<pocket_circ> call [#1/25.4][#2/25.4] [0.415] [+.02][-.26] [0][+4]
+	o<pocket_circ> call [#1/25.4][#2/25.4] [0.250] [-.20][-.53] [0][+4]	
+o<m6cb> endsub
+
+o<m5cb> sub
+	o<pocket_circ> call [#1/25.4][#2/25.4] [0.35] [+.02][-.20] [0][+4]
+	o<pocket_circ> call [#1/25.4][#2/25.4] [0.20] [-.19][-.53] [0][+4]	
+o<m5cb> endsub
+
+o<m5cb_b> sub
+	o<pocket_circ> call [#1/25.4][#2/25.4] [0.40] [+.02][-.30] [0][+4]
+	o<pocket_circ> call [#1/25.4][#2/25.4] [0.20] [-.29][-.53] [0][+4]	
+o<m5cb_b> endsub
+
+o<carray> sub
+	o<m6cb> call [#1+14][#2+14]
+	o<m6cb> call [#1+14][#2-14]
+	o<m6cb> call [#1-14][#2-14]
+	o<m6cb> call [#1-14][#2+14]
+o<carray> endsub
+
+
+o10 if [#<side> EQ 1]
+
+	#<sign> = -1
+	o11 while [#<sign> LE +1]
+
+		o<carray> call [-#11][#<sign>*#20]
+		o<carray> call [-#12][#<sign>*#20]
+		o<carray> call [-#13][#<sign>*#20]
+		o<carray> call [-#14][#<sign>*#20]
+		o<carray> call [-#15][#<sign>*#20]
+
+		o<m5cb_b> call [-595.0][#<sign>*12.5]
+		o<m5cb_b> call [-595.0][#<sign>*62.5]
+		o<m5cb> call [-495.0][#<sign>*62.5]
+		o<m5cb> call [-395.0][#<sign>*62.5]
+		o<m5cb> call [-295.0][#<sign>*62.5]
+		o<m5cb> call [-195.0][#<sign>*62.5]
+		o<m5cb> call [- 95.0][#<sign>*62.5]
+		o<m5cb> call [- 55.0][#<sign>*62.5]
+		o<m5cb> call [- 15.0][#<sign>*62.5]
+		o<m5cb> call [- 12.5][#<sign>*55.0]
+		o<m5cb> call [- 10.0][#<sign>*47.5]
+		o<m5cb> call [- 15.0][#<sign>*27.5]
+		o<m5cb> call [- 12.5][#<sign>*20.0]
+		o<m5cb> call [- 10.0][#<sign>*12.5]
+
+		#<sign> = [#<sign>+2]
+	o11 endwhile
+	
+
+	#<tr> = [#<_td>/2]
+
+	#<xe> = [-605/25.4]
+	#<y> = [-2.9]
+	#<ystep> = 0.08
+	#<dx> = 1.0
+	#<dz> = 0.25
+	G0 X[#<xe>-#<tr>+#<dx>] Y[#<y>]
+	G0 Z0
+
+	o103 while [#<y> LT 2.9]
+		G1 X[#<xe>-#<tr>] Z[-#<dz>]
+		G1 Y[#<y>]
+		#<y> = [#<y>+#<ystep>]
+
+		G1 X[#<xe>-#<tr>+#<dx>] Z[-0]
+		G1 Y[#<y>]
+		#<y> = [#<y>+#<ystep>]
+
+	o103 endwhile
+	G0 Z[#<_z_clearance>]
+
+o10 elseif [#<side> EQ 2]
+#<y> = [-[26.15+14]]
+#<x> = [[31.85+14]]
+
+o<dhole> sub
+	F20
+	o<pocket_circ> call [#1/25.4][#2/25.4] [17.0/25.4] [+.02][-.086] [0.02] [+4]
+	F10
+	o<pocket_circ> call [#1/25.4][#2/25.4] [10.0/25.4] [-.08][-.530] [0.005] [+4]
+o<dhole> endsub
+
+	o<dhole> call [#<x>][#<y>]
+	o<dhole> call [#<x>+60][#<y>]
+	o<dhole> call [#<x>+120][#<y>]
+	o<dhole> call [#<x>+180][#<y>]
+	o<dhole> call [#<x>+240][#<y>]
+o10 endif
+
+M2 ; end program

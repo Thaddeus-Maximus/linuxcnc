@@ -1,0 +1,18 @@
+#<_td> = [1/2]
+G10 L1 P1 R[#<_td>/2]  ; Set tool 1 diameter
+#<_z_clearance> = 0.5
+#<rampang> = 12
+
+M03
+G4 P2
+
+F10
+
+;o<frame_circ> call [0][0] [1.750] [.01][0] [0][4]
+o<frame_circ> call [0][0] [1.382] [.01][-0.6] [0][4]
+
+M05
+G0 Z#<_z_clearance>
+G0 X-2.0
+
+M30

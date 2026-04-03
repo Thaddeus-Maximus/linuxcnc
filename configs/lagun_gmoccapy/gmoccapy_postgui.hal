@@ -1,0 +1,6 @@
+# gmoccapy postgui HAL file for Lagun mill
+# These connections are made after the GUI loads so gmoccapy pins exist
+
+# --- Tool offset display ---
+net tooloffset-x  gmoccapy.tooloffset-x  <=  motion.tooloffset.x
+net tooloffset-z  gmoccapy.tooloffset-z  <=  motion.tooloffset.z

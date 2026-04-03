@@ -1,0 +1,108 @@
+;
+; HYMNBOARD PROGRAM
+;
+; <pn> = 1: Bar lateral;    origin is back center
+; <pn> = 2: Trinity bottom; origin is front center
+; <pn> = 3: Trinity side;   origin is front center
+
+
+#<_z_clearance> = +0.200 ; clearance height
+#<_zd>          = -0.170 ; engraving depth
+
+o<star> sub
+	#<rx> = 0.75
+	#<ry> = 0.375
+	#<rc> = 1.5
+	#<dx>  = 0.32
+	#<dy>  = 0.23
+
+	G0 Z#<_z_clearance>
+	G0 X[#1-#<rx>-#<dx>] Y[#2]
+	G0 Z0
+	G1 X[#1-#<rx>] Y[#2] Z#<_zd>
+	G2 X[#1] Y[#2-#<ry>] R#<rc>
+	;G1 X[#1] Y[#2-#<ry>-#<dy>] Z0
+	;G1 X[#1] Y[#2-#<ry>] Z#<_zd>
+	G2 X[#1+#<rx>] Y[#2] R#<rc>
+	G1 X[#1+#<rx>+#<dx>] Y[#2] Z0
+	G1 X[#1+#<rx>] Y[#2] Z#<_zd>
+	G2 X[#1] Y[#2+#<ry>] R#<rc>
+	;G1 X[#1] Y[#2+#<ry>+#<dy>] Z0
+	;G1 X[#1] Y[#2+#<ry>] Z#<_zd>
+	G2 X[#1-#<rx>] Y[#2] R#<rc>
+	G1 X[#1-#<rx>-#<dx>] Y[#2] Z0
+
+	G0 Z#<_z_clearance>
+o<star> endsub
+
+o<bar> sub
+	#<l> = 1.1
+	G0 Z#<_z_clearance>
+	G0 X[-#1] Y[#2]
+	G1 Z0.0
+	G1 X[-#1+#<l>*#1/ABS[#1]] Z#<_zd>
+	G1 X[+#1-#<l>*#1/ABS[#1]] Z#<_zd>
+	G1 X[+#1]      Z0.0
+	G0 Z#<_z_clearance>
+o<bar> endsub
+
+o<outline> sub
+	G0 Z[#<_z_clearance>]
+	G0 X-9.0 Y[#1+0.0]
+	G0 Z[#2]
+	G41 D1
+	G1 X-8.500 Y[#1-0.289]
+	G1 X-6.495 Y[#1+0.869]
+	G3 X+0.000 Y[#1+2.021] R5.497
+	G3 X+6.495 Y[#1+0.869] R5.497
+	G1 X+8.500 Y[#1-0.289]
+	G40
+	G0 Z#<_z_clearance>
+o<outline> endsub
+
+#<pn> = 4
+
+M03 ; start spindle
+F12 ; feedrate
+G4 P2 ; wait 2 sec (spindle start)
+
+o10 if [#<pn> EQ -1]
+	o<star> call [0][-0.75]
+o10 elseif [#<pn> EQ 1]
+	o<star> call [-6.5][-0.75]
+	o<bar>  call [4.875][-0.75]
+	o<star> call [+6.5][-0.75]
+	o<bar>  call [+5.25][-0.375]
+	o<bar>  call [-5.25][-1.125]
+
+	;o<bar>  call [5.0][-0.750]
+	;o<bar>  call [5.5][-1.125]
+
+o10 elseif [#<pn> EQ 4]
+	o<star> call [-6.5][0.875+1.25]
+	o<star> call [ 0.0][0.875+1.25]
+	o<star> call [+6.5][0.875+1.25]
+o10 elseif [#<pn> EQ 2]
+
+	G10 L1 P1 R[0.45/2]  ; Set tool 1 diameter to 0.125"
+	o<outline> call [2.5] [-0.25]
+	o<outline> call [2.5] [-0.50]
+	o<outline> call [2.5] [-0.80]
+	G10 L1 P1 R[0.375/2]  ; Set tool 1 diameter to 0.125"
+	o<outline> call [2.5] [-0.79]
+
+o10 elseif [#<pn> EQ 3]
+	G10 L1 P1 R[0.45/2]  ; Set tool 1 diameter to 0.125"
+	o<outline> call [2.143] [-0.27]
+	o<outline> call [2.143] [-0.52]
+	o<outline> call [2.143] [-0.80]
+	G10 L1 P1 R[0.375/2]  ; Set tool 1 diameter to 0.125"
+	o<outline> call [2.143] [-0.79]
+
+
+o10 endif
+
+M05 ; stop spindle
+M30 ; end program
+M2  ; also end program
+%

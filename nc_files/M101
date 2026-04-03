@@ -1,0 +1,4 @@
+#!/bin/bash
+
+halcmd sets z-override True
+exit 0

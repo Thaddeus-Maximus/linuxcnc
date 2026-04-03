@@ -1,0 +1,23 @@
+#<_z_clearance> = 1.0
+#<_rampang>     = 5
+
+G10 L1 P1 Z0.0 R0.1875 ; set tool P1 to Z-offset Z0.0 and radius R0.25
+T1   ; set tool to T1
+M06  ; manual toolchange
+
+
+F4.0 ; feedrate
+
+;x1, y1, d, zstart, zend, fincut, mode
+
+#1 = 5.625 ; center to center dist
+
+o<drill_man> call [-#1/2][0]
+o<drill_man> call [0.000][0]
+o<drill_man> call [+#1/2][0]
+
+o<pocket_circ> call [-#1/2][0] [0.76] [0.02][-0.4] [0.02]
+o<pocket_circ> call [+#1/2][0] [0.76] [0.02][-0.4] [0.02]
+
+
+M2 ; end program

@@ -1,0 +1,226 @@
+o<end_angle> sub
+	; o<end_angle> call <0|2> <x> <y1><y2> <angle> <zstart><zend> <fincut> <mode>
+
+	; right now only 0 and 2 work but hey that's most of what you'd do
+	; 0: +x side
+	; 1: +y side
+	; 2: -x side
+	; 3: -y side
+
+	;G10 L0 ; re-read tool data
+	G90	  ; absolute x,y,z
+	G91.1 ; incremental i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<M_CONVENTIONAL> = [FIX[#9/1] MOD 2 EQ 1]
+	#<M_BOTHWAYS>     = [FIX[#9/2] MOD 2 EQ 1]
+	#<M_PLUNGE>       = [FIX[#9/4] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#9/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#9/1] MOD 2 EQ 0]
+	#<M_ONEWAY>       = [FIX[#9/2] MOD 2 EQ 0]
+	#<M_HELIX>        = [FIX[#9/4] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#9/8] MOD 2 EQ 0]
+
+
+	#<td> = #<_td>
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #5
+	o1 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o3 else
+		#<stepover> = [#<td>*0.4]
+	o3 endif
+	o4 if [EXISTS[#<_overlap>]]
+		#<overlap> = #<_overlap>
+	o4 else
+		#<overlap> = [#<stepover>*0.4]
+	o4 endif
+
+	#<c> = #3
+	#<b> = #4
+	o5 if [#4 LT #3]
+		#<c> = #4
+		#<b> = #3
+	o5 endif
+
+	; inputs:
+	; - climb/conv    (C)
+	; - angle pos/neg (A)
+	; - left or right (L)
+
+	; outputs:
+	; - #<b> or #<c>      (B) = L NE A
+	; - order of movement (O) = C NE A
+	; - sign of offsets   (S) = L
+
+	#<M_ANGLE> = [#5 GE 0]
+	#<M_LEFT>  = [#1 EQ 0]
+	#<SW_B> = [#<M_LEFT>  XOR #<M_ANGLE>] ; use #<b>
+	#<SW_O> = [#<M_CLIMB> XOR #<M_ANGLE>] ; order of movement
+
+	#<sign> = 0
+	o10 if [#1 EQ 0]
+		#<sign> = 1
+	o10 elseif [#1 EQ 2]
+		#<sign> = -1
+	o10 endif
+
+	#<origin> = #<b>
+	o11 if [#<SW_B>]
+		#<origin> = #<c>
+	o11 endif
+
+	#<sign_off> = 1
+	o12 if [#<M_ANGLE> NE 0]
+		#<sign_off> = -1
+		#<overlap> = [-#<overlap>]
+	o12 endif
+
+	G0 Z#<z_clearance>
+
+	o100 if [#5 NE 0]
+
+		#<l_total> = [[#<b>-#<c>]*ABS[SIN[#5]]-#<tr>]
+
+		#<l_steps> = FUP[[#<l_total>-ABS[#8]]/#<stepover>]
+
+		#<dl> = 0
+		#<x1> = [SIN[#5]*#<overlap> + #<tr>*COS[#5]]
+		#<x2> = [SIN[#5]*#<overlap> + #<dl>/COS[#5] + #<tr>*SIN[#5]*TAN[#5]]
+		#<y1> = [COS[#5]*#<overlap> + #<dl>/SIN[#5] + #<tr>*COS[#5]/TAN[#5]]
+		#<y2> = [COS[#5]*#<overlap> + #<tr>*SIN[#5]]
+
+		G0 X[#2 + #<x1>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+		G0 Z#6
+		G1 Z#7
+
+		o200 while [#<l_steps> GE 0]
+			#<dl> = [#<l_total> - [#<l_steps>*#<stepover>+ABS[#8]]]
+
+			#<x1> = [SIN[#5]*#<overlap> + #<tr>*COS[#5]]
+			#<x2> = [SIN[#5]*#<overlap> + #<dl>/COS[#5] + #<tr>*SIN[#5]*TAN[#5]]
+			#<y1> = [COS[#5]*#<overlap> + #<dl>/SIN[#5] + #<tr>*COS[#5]/TAN[#5]]
+			#<y2> = [COS[#5]*#<overlap> + #<tr>*SIN[#5]]
+
+			o201 if [#<M_BOTHWAYS>]
+				o211 if [#<l_steps> MOD 2 NE #<M_CLIMB>]
+					G1 X[#2 + #<x1>*#<sign>] Y[#<origin> - #<y1>*#<sign>]
+					G1 X[#2 - #<x2>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+				o211 else
+					G1 X[#2 - #<x2>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+					G1 X[#2 + #<x1>*#<sign>] Y[#<origin> - #<y1>*#<sign>]
+				o211 endif
+			o201 elseif [#<SW_O>]
+				G1 X[#2 + #<x1>*#<sign>] Y[#<origin> - #<y1>*#<sign>]
+				G1 X[#2 - #<x2>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+			o201 else
+				G1 X[#2 - #<x2>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+				G1 X[#2 + #<x1>*#<sign>] Y[#<origin> - #<y1>*#<sign>]
+			o201 endif
+
+			#<dl> = [#<l_total> - [#<l_steps>*#<stepover>+ABS[#8]+#<stepover>*0.2]]
+			#<x1> = [SIN[#5]*#<overlap> + #<tr>*COS[#5]]
+			#<x2> = [SIN[#5]*#<overlap> + #<dl>/COS[#5] + #<tr>*SIN[#5]*TAN[#5]]
+			#<y1> = [COS[#5]*#<overlap> + #<dl>/SIN[#5] + #<tr>*COS[#5]/TAN[#5]]
+			#<y2> = [COS[#5]*#<overlap> + #<tr>*SIN[#5]]
+
+			o202 if [#<M_BOTHWAYS>]
+				; no rapid back for both-ways milling. that's the whole point.
+			o202 elseif [#<SW_O>]
+				G0 X[#2 - #<x2>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+				G0 X[#2 + #<x1>*#<sign>] Y[#<origin> - #<y1>*#<sign>]
+			o202 else
+				G0 X[#2 + #<x1>*#<sign>] Y[#<origin> - #<y1>*#<sign>]
+				G0 X[#2 - #<x2>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+			o202 endif
+
+			#<l_steps> = [#<l_steps>-1]
+		o200 endwhile
+
+		o207 if [#8 GT 0]
+			#<dl> = [#<l_total>]
+			#<x1> = [SIN[#5]*#<overlap> + #<tr>*COS[#5]]
+			#<x2> = [SIN[#5]*#<overlap> + #<dl>/COS[#5] + #<tr>*SIN[#5]*TAN[#5]]
+			#<y1> = [COS[#5]*#<overlap> + #<dl>/SIN[#5] + #<tr>*COS[#5]/TAN[#5]]
+			#<y2> = [COS[#5]*#<overlap> + #<tr>*SIN[#5]]
+
+			o203 if [#<SW_O>]
+				G1 X[#2 + #<x1>*#<sign>] Y[#<origin> - #<y1>*#<sign>]
+				G1 X[#2 - #<x2>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+			o203 else
+				G1 X[#2 - #<x2>*#<sign>] Y[#<origin> + #<y2>*#<sign>]
+				G1 X[#2 + #<x1>*#<sign>] Y[#<origin> - #<y1>*#<sign>]
+			o203 endif
+		o207 endif
+	o100 else
+
+
+		o104 if [#<M_LEFT>]
+			o114 if [#<M_CLIMB>]
+				G0 X[#2 - #<tr> - ABS[#8]] Y[#<c> - #<overlap>]
+				G0 Z#6
+				G1 Z#7
+				G1 Y[#<b> + #<overlap>]
+			o114 else
+				G0 X[#2 - #<tr> - ABS[#8]] Y[#<c> - #<overlap>]
+				G0 Z#6
+				G1 Z#7
+				G1 Y[#<b> + #<overlap>]
+			o114 endif
+		o104 else
+			o124 if [#<M_CONVENTIONAL>]
+				G0 X[#2 + #<tr> + ABS[#8]] Y[#<c> - #<overlap>]
+				G0 Z#6
+				G1 Z#7
+				G1 Y[#<b> + #<overlap>]
+			o124 else
+				G0 X[#2 + #<tr> + ABS[#8]] Y[#<c> - #<overlap>]
+				G0 Z#6
+				G1 Z#7
+				G1 Y[#<b> + #<overlap>]
+			o124 endif
+		o104 endif
+
+
+
+
+		o107 if [#8 GT 0]	
+			G0 Z#<z_clearance>
+			o101 if [#<M_LEFT>]
+				o111 if [#<M_CLIMB>]
+					G0 X[#2 - #<tr>] Y[#<c> - #<overlap>]
+					G0 Z#6
+					G1 Z#7
+					G1 Y[#<b> + #<overlap>]
+				o111 else
+					G0 X[#2 - #<tr>] Y[#<c> - #<overlap>]
+					G0 Z#6
+					G1 Z#7
+					G1 Y[#<b> + #<overlap>]
+				o111 endif
+			o101 else
+				o121 if [#<M_CONVENTIONAL>]
+					G0 X[#2 + #<tr>] Y[#<c> - #<overlap>]
+					G0 Z#6
+					G1 Z#7
+					G1 Y[#<b> + #<overlap>]
+				o121 else
+					G0 X[#2 + #<tr>] Y[#<c> - #<overlap>]
+					G0 Z#6
+					G1 Z#7
+					G1 Y[#<b> + #<overlap>]
+				o121 endif
+			o101 endif
+		o107 endif
+	o100 endif
+
+	G0 Z#<z_clearance>
+
+o<end_angle> endsub
+
+M2

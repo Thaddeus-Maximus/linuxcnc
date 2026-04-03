@@ -1,0 +1,92 @@
+o<slot_chop> sub
+	; o<slot> call [x1][y1] [x2][y2] [width] [ztop][zbot] [fincut] [mode]
+
+	#<M_CONVENTIONAL> = [FIX[#9/1] MOD 2 EQ 1]
+	#<M_BOTHWAYS>     = [FIX[#9/2] MOD 2 EQ 1]
+	#<M_PLUNGE>       = [FIX[#9/4] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#9/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#9/1] MOD 2 EQ 0]
+	#<M_ONEWAY>       = [FIX[#9/2] MOD 2 EQ 0]
+	#<M_HELIX>        = [FIX[#9/4] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#9/8] MOD 2 EQ 0]
+
+	;G10 L0 ; re-read tool data
+	G90	  ; absolute x,y,z
+	G90.1 ; absolute i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<td> = #<_td>
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #5
+	o1 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o3 else
+		#<stepover> = [#<td>*0.4]
+	o3 endif
+
+	#<a> = [ATAN[#4-#2]/[#3-#1]]
+
+	#<l_total> = SQRT[[#1-#3]**2 + [#2-#4]**2]
+	#<l_step>  = [#<l_total>/FUP[#<l_total> / #<stepover>]]
+	#<l>       = 0
+
+
+	G0 Z#<z_clearance>
+
+	G0 X#1 Y#2
+	o200 while [#<l> LE #<l_total>]
+		G0 Z#6
+		G0 X[#1+#<l>*COS[#<a>]] Y[#2+#<l>*SIN[#<a>]]
+		G0 Z#6
+		G1 Z#7
+
+		#<l> = [#<l>+#<l_step>]
+	o200 endwhile
+	
+	#<r> = [[#5-#<td>]/2]
+
+	o100 if [#<M_CLIMB>]
+		o101 if [#8 GT 0]
+		G1 X[#3 +[SIN[#<a>]*[#<r>-#8]]] Y[#4 -[COS[#<a>]*[#<r>-#8]]]			; point 1
+		G3 X[#3 -[SIN[#<a>]*[#<r>-#8]]] Y[#4 +[COS[#<a>]*[#<r>-#8]]] I#3 J#4  ; point 2
+		G1 X[#1 -[SIN[#<a>]*[#<r>-#8]]] Y[#2 +[COS[#<a>]*[#<r>-#8]]]          ; point 3
+		G3 X[#1 +[SIN[#<a>]*[#<r>-#8]]] Y[#2 -[COS[#<a>]*[#<r>-#8]]] I#1 J#2  ; point 4
+		G1 X[#3 +[SIN[#<a>]*[#<r>-#8]]] Y[#4 -[COS[#<a>]*[#<r>-#8]]]			; point 1
+		o101 endif
+
+		G1 X[#3 +[SIN[#<a>]*[#<r>]]] Y[#4 -[COS[#<a>]*[#<r>]]]			; point 1
+		G3 X[#3 -[SIN[#<a>]*[#<r>]]] Y[#4 +[COS[#<a>]*[#<r>]]] I#3 J#4 	; point 2
+		G1 X[#1 -[SIN[#<a>]*[#<r>]]] Y[#2 +[COS[#<a>]*[#<r>]]]          	; point 3
+		G3 X[#1 +[SIN[#<a>]*[#<r>]]] Y[#2 -[COS[#<a>]*[#<r>]]] I#1 J#2  	; point 4
+		G1 X[#3 +[SIN[#<a>]*[#<r>]]] Y[#4 -[COS[#<a>]*[#<r>]]]			; point 1
+
+	o100 else
+		o102 if [#8 GT 0]
+		G1 X[#3 -[SIN[#<a>]*[#<r>-#8]]] Y[#4 +[COS[#<a>]*[#<r>-#8]]] 			; point 2
+		G3 X[#3 +[SIN[#<a>]*[#<r>-#8]]] Y[#4 -[COS[#<a>]*[#<r>-#8]]] I#3 J#4	; point 1
+		G1 X[#1 +[SIN[#<a>]*[#<r>-#8]]] Y[#2 -[COS[#<a>]*[#<r>-#8]]] 			; point 4
+		G3 X[#1 -[SIN[#<a>]*[#<r>-#8]]] Y[#2 +[COS[#<a>]*[#<r>-#8]]] I#1 J#2  ; point 3
+		G1 X[#3 -[SIN[#<a>]*[#<r>-#8]]] Y[#4 +[COS[#<a>]*[#<r>-#8]]] 			; point 2
+		o102 endif
+
+		G1 X[#3 -[SIN[#<a>]*[#<r>]]] Y[#4 +[COS[#<a>]*[#<r>]]] 			; point 2
+		G3 X[#3 +[SIN[#<a>]*[#<r>]]] Y[#4 -[COS[#<a>]*[#<r>]]] I#3 J#4	; point 1
+		G1 X[#1 +[SIN[#<a>]*[#<r>]]] Y[#2 -[COS[#<a>]*[#<r>]]] 			; point 4
+		G3 X[#1 -[SIN[#<a>]*[#<r>]]] Y[#2 +[COS[#<a>]*[#<r>]]] I#1 J#2  ; point 3
+		G1 X[#3 -[SIN[#<a>]*[#<r>]]] Y[#4 +[COS[#<a>]*[#<r>]]] 			; point 2
+
+	o100 endif
+
+	G0 X#3 Y#4
+	G0 Z#<z_clearance>
+
+
+
+o<slot_chop> endsub
+
+M2

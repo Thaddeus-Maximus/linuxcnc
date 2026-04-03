@@ -1,0 +1,36 @@
+G54
+G90
+
+#<_z_clr> = 0.1
+#<_z_thru> = -0.5
+F3.0
+
+G0 Z#<_z_clr>
+
+G0 X0 Y0
+G1 Z#<_z_thru>
+G0 Z#<_z_clr>
+
+G0 X2.75 Y0.55
+G1 Z#<_z_thru>
+G0 Z#<_z_clr>
+
+G0 X2.75 Y-0.55
+G1 Z#<_z_thru>
+G0 Z#<_z_clr>
+
+G0 X8.25 Y-0.55
+G1 Z#<_z_thru>
+G0 Z#<_z_clr>
+
+G0 X8.25 Y0.55
+G1 Z#<_z_thru>
+G0 Z#<_z_clr>
+
+G0 X11 Y0
+G1 Z#<_z_thru>
+G0 Z#<_z_clr>
+
+G0 Z1.0
+G0 X0 Y0
+M02

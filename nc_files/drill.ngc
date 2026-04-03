@@ -1,0 +1,35 @@
+o<drill> sub
+	; x1, y1, zstart, zend, peckdp
+	; #1  #2  #3       #4     #5
+
+	G90	  ; absolute x,y,z
+	M101  ; enable Z-axis (M102 disables)
+
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #3
+	o1 endif
+
+	;;;;;;;;;; PROGRAM ;;;;;;;;;
+	
+	G0 Z#<z_clearance>
+	G0 X#1 Y#2
+	G0 Z#3
+
+	o104 if [#5 NE 0] ; peck drilling
+		#<h> = #3
+		o101 while [#<h> GT #4]
+			G1 Z#<h>
+			G0 Z#3
+			G0 Z[#<h>+.02]
+			#<h> = [#<h>-#5]
+		o101 endwhile
+	o104 endif
+
+	G1 Z#4
+	G0 Z#<z_clearance>
+
+o<drill> endsub
+
+M2

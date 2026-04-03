@@ -1,0 +1,28 @@
+#<_z_clearance> = .5
+#<_rampang>     = 10
+#<_td> = [1/4]
+
+; mode refernce
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+G20  ; G21 mm / G20 inch
+G54  ; absolute coordinates
+
+#<zt> = 0.02
+#<zb> = -0.30
+
+F10
+
+;o<pocket_circ> call [-0.375][-.5] [.240] [#<zt>][#<zb>]
+;o<pocket_circ> call [-2.375][-.5] [.323] [#<zt>][#<zb>]
+o<pocket_circ> call [-3.375][-.5] [.715] [#<zt>][#<zb>]
+o<pocket_circ> call [-3.875][-.5] [.715] [#<zt>][#<zb>]
+o<pocket_circ> call [-4.375][-.5] [.715] [#<zt>][#<zb>]
+
+o<end_round> call [180] [-4.375][-.5] [.52] [#<zt>][#<zb>]
+
+
+M2 ; end program

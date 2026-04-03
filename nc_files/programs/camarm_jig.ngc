@@ -1,0 +1,75 @@
+(Project camarm)
+(Created by Estlcam version 11 build 11.245)
+(Machining time about 00:06:40 hours)
+
+(Required tools:)
+(End mill 1/8)
+(End mill 1/4)
+
+#<_z_clr> = 0.5
+#<_z_start> = 0.01
+#<_z_down> = -0.20
+
+G90
+G00 Z#<_z_clr>
+
+F25.0
+
+o100 sub
+	G00 Z#<_z_start>
+	G01 Z#<_z_down>
+	G00 Z#<_z_clr>
+o100 endsub
+
+
+
+;G00 X0.37499 Y-0.94802 Z#<_z_clr>
+;o100 call
+;G00 X1.50000 Y-0.94802 Z#<_z_clr>
+;o100 call
+;G00 X3.53275 Y-1.04027 Z#<_z_clr>
+;o100 call
+;G00 X5.28276 Y-1.79028 Z#<_z_clr>
+;o100 call
+;G00 X4.53273 Y-3.07302 Z#<_z_clr>
+;o100 call
+;G00 X6.03275 Y-0.49124 Z#<_z_clr>
+;o100 call
+;G00 X7.33865 Y-0.49257 Z#<_z_clr>
+;o100 call
+;G00 X8.62137 Y-0.49124 Z#<_z_clr>
+;o100 call
+;G00 X8.62237 Y-1.49124 Z#<_z_clr>
+;o100 call
+G00 X8.62341 Y-2.49124 Z#<_z_clr>
+o100 call
+G00 X8.62441 Y-3.49123 Z#<_z_clr>
+o100 call
+G00 X8.62544 Y-4.49125 Z#<_z_clr>
+o100 call
+G00 X8.62644 Y-5.49124 Z#<_z_clr>
+o100 call
+G00 X8.62744 Y-6.49124 Z#<_z_clr>
+o100 call
+G00 X8.62848 Y-7.49124 Z#<_z_clr>
+o100 call
+G00 X6.83300 Y-6.99306 Z#<_z_clr>
+o100 call
+G00 X6.49025 Y-6.99341 Z#<_z_clr>
+o100 call
+G00 X4.53273 Y-6.07303 Z#<_z_clr>
+o100 call
+G00 X3.53275 Y-8.10578 Z#<_z_clr>
+o100 call
+G00 X1.50000 Y-8.19803 Z#<_z_clr>
+o100 call
+G00 X0.37499 Y-8.19803 Z#<_z_clr>
+o100 call
+G00 X0.93748 Y-4.57302 Z#<_z_clr>
+o100 call
+G00 X10.47299 Y-6.98937 Z#<_z_clr>
+o100 call
+G00 X10.81570 Y-6.98940 Z#<_z_clr>
+o100 call
+
+M02

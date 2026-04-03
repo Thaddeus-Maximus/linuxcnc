@@ -1,0 +1,70 @@
+#<_td> = [3/16]
+#<_z_clearance> = 0.2
+#<rampang> = 4
+#<_zd> = 0.6
+
+o<aperture> sub
+	G90.1
+	#<r> = [1.720/2]
+	#<d> = 0.5
+	#<g> = 0.25
+
+	;#<r1> = [SQRT[[#<r>**2-[#<d>+#<c>]**2]
+	#<rp> = [SQRT[#<r>**2-[#<d>]**2]
+
+	G40
+	G41 D1
+
+	G0 X[#1+[#<r>]/SQRT[2]]  Y[#2+[#<r>]/SQRT[2]]
+	G1 Z#<_zd>
+	
+	; NE corner
+	G1 X[#1+[+#<r>+#<g>     ]/SQRT[2]] Y[#2+[#<r>+#<g>     ]/SQRT[2]]
+	G1 X[#1+[+#<r>+#<g>-#<d>]/SQRT[2]] Y[#2+[#<r>+#<g>+#<d>]/SQRT[2]]
+	G1 X[#1+[+#<rp>-#<d>    ]/SQRT[2]] Y[#1+[#<rp>+#<d>]/SQRT[2]]
+	
+	; NW corner
+	G3 X[#1+[-#<rp>+#<d>    ]/SQRT[2]] Y[#1+[#<rp>+#<d>]/SQRT[2]]
+	G1 X[#1+[-#<r>-#<g>+#<d>]/SQRT[2]] Y[#2+[#<r>+#<g>+#<d>]/SQRT[2]]
+	G1 X[#1+[-#<r>-#<g>-#<d>]/SQRT[2]] Y[#2+[#<r>+#<g>-#<d>]/SQRT[2]]
+	G1 X[#1+[-#<rp>-#<d>    ]/SQRT[2]] Y[#1+[#<rp>-#<d>]/SQRT[2]]
+
+	; SW corner
+	G3 X[#1+[-#<rp>-#<d>    ]/SQRT[2]] Y[#1+[-#<rp>+#<d>]/SQRT[2]] R#<r>
+	G1 X[#1+[-#<r>-#<g>-#<d>]/SQRT[2]] Y[#2+[-#<r>-#<g>+#<d>]/SQRT[2]]
+	G1 X[#1+[-#<r>-#<g>+#<d>]/SQRT[2]] Y[#2+[-#<r>-#<g>-#<d>]/SQRT[2]]
+	G1 X[#1+[-#<rp>+#<d>    ]/SQRT[2]] Y[#1+[#<rp>+#<d>]/SQRT[2]]
+
+	; SE corner
+	G3 X[#1+[+#<rp>-#<d>    ]/SQRT[2]] Y[#1+[-#<rp>+#<d>]/SQRT[2]]
+	G1 X[#1+[+#<r>+#<g>-#<d>]/SQRT[2]] Y[#2+[-#<r>-#<g>-#<d>]/SQRT[2]]
+	G1 X[#1+[+#<r>+#<g>+#<d>]/SQRT[2]] Y[#2+[-#<r>-#<g>+#<d>]/SQRT[2]]
+	G1 X[#1+[+#<rp>+#<d>    ]/SQRT[2]] Y[#1+[-#<rp>-#<d>]/SQRT[2]]
+
+	; back to NE
+	G3 X[#1+[+#<rp>+#<d>    ]/SQRT[2]] Y[#1+[+#<rp>-#<d>]/SQRT[2]]
+	G1 X[#1+[+#<r>+#<g>+#<d>]/SQRT[2]] Y[#2+[+#<r>+#<g>-#<d>]/SQRT[2]]
+	G1 X[#1+[+#<r>+#<g>-#<d>]/SQRT[2]] Y[#2+[+#<r>+#<g>+#<d>]/SQRT[2]]
+
+o<aperture> endsub
+
+o<aperture> call [1.375][-1.875]
+
+#<d> = 0.315
+o<pocket_circ> call [0.550][-0.446] [#<d>] [0.02][#<_zd>]
+o<pocket_circ> call [0.550][-3.304] [#<d>] [0.02][#<_zd>]
+o<pocket_circ> call [3.025][-1.875] [#<d>] [0.02][#<_zd>]
+
+
+#<d> = 0.20
+o<pocket_circ> call [5.625][-0.375] [#<d>] [0.1][-0.6]
+o<pocket_circ> call [5.125][-1.125] [#<d>] [0.1][-0.6]
+o<pocket_circ> call [5.625][-1.875] [#<d>] [0.1][-0.6]
+o<pocket_circ> call [5.125][-2.625] [#<d>] [0.1][-0.6]
+o<pocket_circ> call [5.625][-3.375] [#<d>] [0.1][-0.6]
+
+M05
+G0 Z#<_z_clearance>
+G0 X-0.5 Y0.5
+
+M30

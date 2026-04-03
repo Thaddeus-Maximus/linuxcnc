@@ -1,0 +1,105 @@
+o<spquircle_pocket> sub
+	; o<spquircle_boss> call [x][y] [square_width] [ztop][zbot] [finishcut] [mode]
+
+	#<M_CONVENTIONAL> = [FIX[#7/1]  MOD 2 EQ 1]
+	#<M_BOTHWAYS>     = [FIX[#7/2]  MOD 2 EQ 1]
+	#<M_PLUNGE>       = [FIX[#7/4]  MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#7/8]  MOD 2 EQ 1]
+	#<M_OVERCUT>      = [FIX[#7/16] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#7/1]  MOD 2 EQ 0]
+	#<M_ONEWAY>       = [FIX[#7/2]  MOD 2 EQ 0]
+	#<M_HELIX>        = [FIX[#7/4]  MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#7/8]  MOD 2 EQ 0]
+
+	;G10 L0 ; re-read tool data
+	G90	  ; absolute x,y,z
+	G90.1 ; G91.1 incremental / G90.1 absolute i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<td> = #<_td>
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #5
+	o1 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = [#<_stepover>*0.8]
+	o3 else
+		#<stepover> = [#<td>*0.4*0.8]
+	o3 endif
+
+
+	G0 Z#<z_clearance>
+	o11 if [#<M_HELIX>]
+		o<helical_plunge> call [#1][#2] [#3] [#4][#5] [#7]
+	o11 else
+		G0 X[#1] Y[#2]
+		G0 Z[#4]
+		G1 Z[#5]
+	o11 endif
+
+	#<dist> = [[#3-#<td>]/2]
+	#<n_steps> = 1
+	#<n_steps_total> = [FIX[#<dist>/#<stepover>]]
+	#<stepover> = [#<dist>/#<n_steps_total>]
+
+	#<ys> = [-1]
+	o10 if [#<M_CONVENTIONAL>]
+		#<ys> = [+1]
+	o10 endif
+
+	o30 while [#<n_steps> LE #<n_steps_total>]
+
+		#<a> = 0
+		o20 while [#<a> LE 360]
+			; 0 = square, 1 = circle
+			#<pow> = [1+1/#<n_steps_total>-#<n_steps>/#<n_steps_total>]  ;1;[[#<n_steps>-#<a>/360+0.95]/#<n_steps_total>]
+			#<a_lim> = #<a>
+			;o400 if [#<a_lim> GT 20]
+			;		#<a_lim> = 20
+			;o400 endif
+			#<r> = [[#<n_steps>+#<a_lim>/360-1]*#<stepover>]
+
+			o201 if [#<a> LT 90]
+				G1 X[#1+[ABS[COS[#<a>]]**#<pow>]*#<r>] Y[#2-[ABS[SIN[#<a>]]**#<pow>]*#<r>*#<ys>]
+			o201 elseif [#<a> LT 180]
+				G1 X[#1-[ABS[COS[#<a>]]**#<pow>]*#<r>] Y[#2-[ABS[SIN[#<a>]]**#<pow>]*#<r>*#<ys>]
+			o201 elseif [#<a> LT 270]
+				G1 X[#1-[ABS[COS[#<a>]]**#<pow>]*#<r>] Y[#2+[ABS[SIN[#<a>]]**#<pow>]*#<r>*#<ys>]
+			o201 else
+				G1 X[#1+[ABS[COS[#<a>]]**#<pow>]*#<r>] Y[#2+[ABS[SIN[#<a>]]**#<pow>]*#<r>*#<ys>]
+			o201 endif
+
+			#<a> = [#<a>+1]
+		o20 endwhile
+
+		#<n_steps> = [#<n_steps>+1]
+	o30 endwhile
+
+	;o31 if [#<M_OVERCUT>]
+		G1 X[#1+[#3/2-#<tr>]] Y[#2-[#3/2-#<tr>]*#<ys>]
+		G1 X[#1-[#3/2-#<tr>]] Y[#2-[#3/2-#<tr>]*#<ys>]
+		G1 X[#1-[#3/2-#<tr>]] Y[#2+[#3/2-#<tr>]*#<ys>]
+		G1 X[#1+[#3/2-#<tr>]] Y[#2+[#3/2-#<tr>]*#<ys>]
+		G1 X[#1+[#3/2-#<tr>]] Y[#2]
+	;o31 else
+		;; this is wrong fix it
+		;G1 X[#1+[#3/2-#<tr>]] Y[#2-[#3/2-#<tr>]*#<ys>]
+		;G2 I[#1+[#3/2]] J[#2-[#3/2-#<tr>]*#<ys>] X[#1+[#3/2-#<tr>+#<tr>*SQRT[2]]] Y[#2-[#3/2-#<tr>+#<tr>*SQRT[2]]*#<ys>]
+		;G3 I[#1+[#3/2-#<tr>]] J[#2-[#3/2]*#<ys>] X[#1+[#3/2-#<tr>+#<tr>*SQRT[2]]] Y[#2-[#3/2-#<tr>+#<tr>*SQRT[2]]*#<ys>]
+		;G1 X[#1-[#3/2-#<tr>]] Y[#2-[#3/2-#<tr>]*#<ys>]
+		;G1 X[#1-[#3/2-#<tr>]] Y[#2+[#3/2-#<tr>]*#<ys>]
+		;G1 X[#1+[#3/2-#<tr>]] Y[#2+[#3/2-#<tr>]*#<ys>]
+		;G1 X[#1+[#3/2-#<tr>]] Y[#2]
+	;o31 endif
+
+	
+
+	G0 Z#<z_clearance>
+
+
+o<spquircle_pocket> endsub
+
+M2

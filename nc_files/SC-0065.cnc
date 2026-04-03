@@ -1,0 +1,63 @@
+#<_z_clearance> = +0.200 ; clearance height
+
+;M03 ; start spindle
+F12 ; feedrate
+
+#<_td> = 0.5
+M6 T1 ; tool 1: 1/2" endmill
+G43
+M03
+G4 P1 ; wait 2 sec (spindle start)
+
+; drive end
+;G0 Z#<_z_clearance>
+;G0 X[#<_td>/2] Y[#<_td>/4]
+;G0 Z-0.65
+;G1 Y[-0.5-#<_td>/4]
+
+; drive flat
+G0 Z#<_z_clearance>
+G0 X[-.4375+#<_td>/2] Y0.15
+G0 Z-.115
+G1 Y-.6
+
+; dead flat
+G0 Z#<_z_clearance>
+G0 X[-5.625-#<_td>/2] Y0.15
+G0 Z-.08
+G1 Y-.6
+
+; drive end
+;G0 Z#<_z_clearance>
+;G0 X[-5.875-#<_td>/2] Y[-0.5-#<_td>/4]
+;G0 Z-0.65
+;G1 Y[#<_td>/4]
+
+M05
+G0 X-8
+M6 T2 ; tool 2: 5/32" drillbit
+M03
+G43
+G4 P0.5
+
+G0 Z#<_z_clearance>
+G0 X-.170 Y-.25
+G0 Z-.1
+G1 Z-.6 F5
+
+
+G0 Z#<_z_clearance>
+G0 X-5.705 Y-.25
+G0 Z-.08
+G1 Z-.15 F1
+G1 Z-.6 F4
+
+G0 Z#<_z_clearance>
+
+
+
+M05 ; stop spindle
+G0 X-8
+M30 ; end program
+M2  ; also end program
+%

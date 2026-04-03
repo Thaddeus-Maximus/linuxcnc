@@ -1,0 +1,36 @@
+#<_z_clearance> = 0.2
+#<rampang> = 10
+
+M03
+G4 P3
+#<op> = 2
+
+; OP 1: Holes in side
+;   Origin: back middle
+o10 if [#<op> EQ 1]
+	#<_td> = 0.125
+	F16
+	o<pocket_circ> call [-.5][-.540] [0.500] [0.05][-0.2] [0.01] [+4]
+
+	o<drill> call [-1.5][-.480] [0.05][-0.2]
+	o<drill> call [-1.5][-.680] [0.05][-0.2]
+	o<drill> call [-1.5][-.880] [0.05][-0.2]
+
+; OP 2: PG holes in bottom
+;   Origin: back middle
+o10 elseif [#<op> EQ 2]
+	#<_td> = 0.125
+	F16
+
+	o<frame_circ> call [0.00][-3.150+1.920] [.84] [+0.10][-0.25] [0.01] [+4]
+	o<frame_circ> call [-1.6][-3.150+2.230] [.84] [+0.10][-0.25] [0.01] [+4]
+	o<frame_circ> call [+1.6][-3.150+2.230] [.84] [+0.10][-0.25] [0.01] [+4]
+
+	o<frame_circ> call [0.00][-3.150+1.920] [.89] [+0.10][-0.25] [0.01] [+4]
+	o<frame_circ> call [-1.6][-3.150+2.230] [.89] [+0.10][-0.25] [0.01] [+4]
+	o<frame_circ> call [+1.6][-3.150+2.230] [.89] [+0.10][-0.25] [0.01] [+4]
+G0 Z1.5
+o10 endif
+
+M05
+M30

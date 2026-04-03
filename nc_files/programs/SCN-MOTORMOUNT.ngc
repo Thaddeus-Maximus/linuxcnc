@@ -1,0 +1,44 @@
+#<_z_clearance> = .5
+#<_rampang>     = 10
+
+; mode refernce
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+G20  ; G21 mm / G20 inch
+G54  ; absolute coordinates
+
+#<zt> = 0.02
+#<zb> = -0.60
+
+#<phase> = 2
+
+o10 if [#<phase> EQ 1]
+	#<_td> = .26
+	F5
+	o<drill> call [0.500][-.50] [#<zt>][#<zb>]
+	o<drill> call [0.500][-3.0] [#<zt>][#<zb>]
+	o<drill> call [5.125][-3.0] [#<zt>][#<zb>]
+	o<drill> call [5.125][-.50] [#<zt>][#<zb>]
+
+	o<drill> call [7.375][-0.500] [#<zt>][#<zb>]
+	o<drill> call [9.625][-0.500] [#<zt>][#<zb>]
+	o<drill> call [9.625][-2.156] [#<zt>][#<zb>]
+	o<drill> call [7.375][-2.156] [#<zt>][#<zb>]
+o10 elseif [#<phase> EQ 2]
+	#<_td> = .375
+	F8
+
+	o<end_angle> call [2] [10] [0][-3.5] [0] [#<zt>][#<zb>]
+
+	o<slot_chop> call [5.125][-.50] [5.375][-.50] [.41] [#<zt>][#<zb>]
+	o<slot_chop> call [5.125][-3.0] [5.375][-3.0] [.41] [#<zt>][#<zb>]
+	o<slot_chop> call [0.500][-3.0] [.75][-3.0] [.41] [#<zt>][#<zb>]
+	o<slot_chop> call [0.500][-.50] [.75][-.50] [.41] [#<zt>][#<zb>]
+
+	o<end_angle> call [0] [ 0] [0][-3.5] [0] [#<zt>][#<zb>]
+o10 endif
+
+M2 ; end program

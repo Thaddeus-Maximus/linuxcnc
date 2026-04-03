@@ -1,0 +1,31 @@
+#<_z_clearance> = 1.0
+#<_rampang>     = 5
+
+;#<_overlap> = 0
+
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+
+G10 L1 P1 Z0.0 R0.25 ; set tool
+T1   ; set tool to T1
+M06  ; manual toolchange
+G54  ; absolute coordinates
+F10  ; 10 ft/min
+
+; cope a 1.315" OD tube
+
+o<end_angle> call [0] [-1] [0.0][-1.315] [0] [+0.00][-0.75] [0.0] [0]
+o<end_angle> call [0] [-1] [0.0][-1.315] [0] [-0.75][-1.35] [0.0] [0]
+
+o<end_cope> call [180] [-1.375][-1.315/2] [1.315] [+0.0][-0.65] [-0.01] [+2+4]
+;o<end_cope> call [180] [-1.375][-1.315/2] [1.315] [-0.5][-1.0] [-0.01] [+2+4]
+o<end_cope> call [180] [-1.375][-1.315/2] [1.315] [-0.65][-1.32] [+0.01] [+2+4]
+
+o<slot_chop> call [0.0][-1.315/2] [0.5][-1.315/2] [0.515] [0.1][-0.3] [0.005] [+2]
+
+o<slot_chop> call [2.0][-1.315/2] [2.5][-1.315/2] [0.515] [0.1][-0.3] [0.005] [+2]
+
+M2 ; end program

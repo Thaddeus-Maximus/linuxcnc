@@ -1,0 +1,76 @@
+o<face> sub
+	; o<face> call [x][y] [x][y] [ztop][zbot] [stepover_ratio]
+
+	G90	  ; absolute x,y,z
+	G90.1 ; absolute i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<td> = #<_td>
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #5
+	o1 endif
+	o2 if [EXISTS[#<_rampang>]]
+		#<rampang> = #<_rampang>
+	o2 else
+		#<rampang> = 5 ; degrees
+	o2 endif
+	o3 if [#7 GT 0]
+		#<stepover> = [#<td>*#7]
+	o3 elseif [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o3 else
+		#<stepover> = [#<td>*0.9]
+	o3 endif
+
+	#<minx> = #1
+	#<maxx> = #3
+	o11 if [#3 LT #1]
+		#<minx> = #3
+		#<maxx> = #1
+	o11 endif
+
+	#<miny> = #2
+	#<maxy> = #4
+	o12 if [#4 LT #2]
+		#<miny> = #4
+		#<maxy> = #2
+	o12 endif
+
+	#<cx> = [[#<minx>+#<maxx>]/2]
+	#<cy> = [[#<miny>+#<maxy>]/2]
+	#<rx> = [[[#<maxx>-#<minx>]-#<td>]/2]
+	#<ry> = [[[#<maxy>-#<miny>]-#<td>]/2]
+
+	#<y> = [#<miny> + #<tr>*0.8]
+	#<xside> = [-1]
+
+	G0 Z#<z_clearance>
+	G0 X#<minx> Y#<y>
+	G0 Z#5
+	G1 Z#6
+
+	o100 while [#<y> LT [#<maxy>]]
+
+		G1 Y#<y>
+
+		o101 if [#<xside> LT 0]
+			G1 X#<maxx>
+		o101 else
+			G1 X#<minx>
+		o101 endif
+
+		#<xside> = [-#<xside>]
+		#<y> = [#<y> + #<stepover>]
+		
+	o100 endwhile
+
+
+
+	G0 Z#<z_clearance>
+
+
+o<face> endsub

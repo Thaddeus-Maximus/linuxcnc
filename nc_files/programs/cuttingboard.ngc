@@ -1,0 +1,56 @@
+F20
+G90
+T1
+M06
+
+
+
+#<_retract_z> = 1.0
+#<_bottom_z>  = -0.0
+#<_start_z>   = 0.00
+#<_feed_z>    = 40.0
+#<_feed_xy>   = 60.0
+
+#<_diam_t1>   = 0.75
+
+#<_pocket_w> = 19
+#<_pocket_h> = 13
+
+;#<_outer_w>  = 18.5
+;#<_outer_h>  = 12.5
+
+G54
+G91.1 ; relative arc distance
+
+G0 X[-[#<_pocket_w>-#<_diam_t1>]/2] Y[-[#<_pocket_h>-#<_diam_t1>]/2] Z#<_retract_z>
+G0 Z#<_start_z>
+G1 F#<_feed_z> Z#<_bottom_z>
+
+G1 F#<_feed_xy> X[-[#<_pocket_w>-#<_diam_t1>]/2] Y[+[#<_pocket_h>-#<_diam_t1>]/2]
+G1 X[+[#<_pocket_w>-#<_diam_t1>]/2] Y[+[#<_pocket_h>-#<_diam_t1>]/2]
+G1 X[+[#<_pocket_w>-#<_diam_t1>]/2] Y[-[#<_pocket_h>-#<_diam_t1>]/2]
+G1 X[-[#<_pocket_w>-#<_diam_t1>]/2] Y[-[#<_pocket_h>-#<_diam_t1>]/2]
+
+#<y> = [-[#<_pocket_h>-#<_diam_t1>]/2 + .1]
+#<i> = 0
+o201 while [#<y> LT [+[#<_pocket_h>-#<_diam_t1>]/2]]
+
+	o203 if [[#<i> MOD 2] EQ 0]
+		G1 X[-[#<_pocket_w>-#<_diam_t1>]/2 + .1] Y#<y>
+		G1 X[+[#<_pocket_w>-#<_diam_t1>]/2 - .1] Y#<y>
+	o203 else
+		G1 X[+[#<_pocket_w>-#<_diam_t1>]/2 - .1] Y#<y>
+		G1 X[-[#<_pocket_w>-#<_diam_t1>]/2 + .1] Y#<y>
+	o203 endif
+
+	#<i> = [#<i> + 1]
+	#<y> = [-[#<_pocket_h>-#<_diam_t1>]/2 + .1 + #<i>*#<_diam_t1>*0.8]
+
+o201 endwhile
+
+
+M2 (Program End)
+
+
+
+M2

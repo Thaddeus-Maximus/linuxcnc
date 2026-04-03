@@ -1,0 +1,26 @@
+#<_z_clearance> = 0.5
+#<_rampang> = 5
+#<_td> = [1/4]
+
+
+
+M03
+
+#<op> = 2
+
+; OP 1: Holes
+;   Origin: center
+;o10 if [#<op> EQ 1]
+F10
+
+;o<pocket_circ> call [-1][0] [1.5] [0.05][-0.15]
+
+o<frame_circ> call [0.25][-0.375] [0.353*2] [.05][-0.4]
+o<frame_circ> call [0.25][-0.375] [0.353*2] [.05][-0.8]
+o<frame_circ> call [0.25][-0.375] [0.353*2] [.05][-1.25]
+
+;o<drill_man> call [-1][+1]
+;o<drill_man> call [-1][-1]
+
+M05
+M30

@@ -1,0 +1,5 @@
+T1   P1   D+0.375000 I+7.000000 ;1/8 end mill Sample Tool
+T2   P2   D+0.062500 ;1/16 end mill Sample Tool
+T3   P3   D+0.201000 ;#7 tap drill Sample Tool
+T4   P4   D+2.000000 ;2 inch mill Sample Tool
+T5   P5   D+0.250000 ;1/4

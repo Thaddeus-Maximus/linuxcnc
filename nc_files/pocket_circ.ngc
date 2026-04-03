@@ -1,0 +1,131 @@
+o<pocket_circ> sub
+	; o<pocket_circ> call [x][y] [diameter] [ztop][zbot] [finishcut] [mode]
+
+	#<M_CONVENTIONAL> = [FIX[#7/1] MOD 2 EQ 1]
+	#<M_BOTHWAYS>     = [FIX[#7/2] MOD 2 EQ 1]
+	#<M_PLUNGE>       = [FIX[#7/4] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#7/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#7/1] MOD 2 EQ 0]
+	#<M_ONEWAY>       = [FIX[#7/2] MOD 2 EQ 0]
+	#<M_HELIX>        = [FIX[#7/4] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#7/8] MOD 2 EQ 0]
+
+	G90	  ; absolute x,y,z
+	G90.1 ; absolute i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<td> = [#<_td>]
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #4
+	o1 endif
+	o2 if [EXISTS[#<_rampang>]]
+		#<rampang> = #<_rampang>
+	o2 else
+		#<rampang> = 5 ; degrees
+	o2 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o3 else
+		#<stepover> = [#<td>*0.4]
+	o3 endif
+
+	o4 if [#<td> GT #3]
+		o5 return
+	o4 endif
+
+	#<a> = 0
+	#<r> = 0
+	o100 if [#<M_HELIX>] ; helical plunge
+		#<r> = [#<td>*0.3]
+		o115 if [[[#3-#<td>]/2-ABS[#6]] LE #<r>]
+			#<r> = [[[#3-#<td>]/2-ABS[#6]]*0.8]
+		o115 endif
+
+		#<z_step>  = [#<r>*2*3.14*TAN[#<rampang>]]
+
+		G0 Z#<z_clearance>
+		G0 X[#1+#<r>] Y[#2]
+		G0 Z#4
+
+		; helical plunge
+		#<z> = [#4-#<z_step>]
+		o101 while [#<z> GT #5]
+			o102 if [#<M_CLIMB>]
+				G3 X[#1+#<r>] Y[#2] I[#1] J[#2] Z[#<z>] P1
+			o102 else
+				G2 X[#1+#<r>] Y[#2] I[#1] J[#2] Z[#<z>] P1
+			o102 endif
+			#<z> = [#<z> - #<z_step>]
+		o101 endwhile
+
+		; finish the helical plunge
+		#<a> = [[#<z>-#5]/[#4-#5]*360] ; TODO: what the heck is the denominator here doing?
+		o103 if [#<M_CLIMB>]
+			G3 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>] I[#1] J[#2] Z[#5]
+			G3 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>] I[#1] J[#2] Z[#5]
+		o103 else
+			G2 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>] I[#1] J[#2] Z[#5]
+			G2 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>] I[#1] J[#2] Z[#5]
+		o103 endif
+
+	o100 elseif [#<M_PLUNGE>] ; straight plunge
+		
+
+		G0 Z#<z_clearance>
+		G0 X[#1] Y[#2]
+		G0 Z[#4]
+		G1 Z[#5]
+
+	o100 endif
+
+	; do the spiral :)
+	#<r_base> = #<r>
+	#<a_base> = #<a>
+	o105 while [#<r> LT [[#3-#<td>]/2-ABS[#6]]]
+
+		o106 if [#<M_CLIMB>]
+			G1 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>]
+		o106 else
+			G1 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>]
+		o106 endif
+		#<a> = [#<a>+1] ; next angle
+
+		#<r> = [#<r_base>+[#<a>-#<a_base>]/360*#<stepover>] ; compute the radius accordingly
+	o105 endwhile
+
+	; pre-finish cut
+	#<r> = [[#3-#<td>]/2-ABS[#6]]
+	o107 if [#<M_CLIMB>]
+		G1 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>]
+		G3 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>] I[#1] J[#2]
+	o107 else
+		G1 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>]
+		G2 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>] I[#1] J[#2]
+	o107 endif
+
+	; finish cut
+	o104 if [ABS[#6] GT 0.0]
+		#<r> = [[#3-#<td>]/2]
+		o108 if [#<M_CLIMB>]
+			G1 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>]
+			G3 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>] I[#1] J[#2]
+			#<r> = [[#3-#<td>]/2*0.9]
+			G1 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>]
+		o108 else
+			G1 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>]
+			G2 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>] I[#1] J[#2]
+			#<r> = [[#3-#<td>]/2*0.9]
+			G1 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>]
+		o108 endif
+	o104 endif
+
+	G0 Z#<z_clearance>
+
+
+o<pocket_circ> endsub
+
+M2

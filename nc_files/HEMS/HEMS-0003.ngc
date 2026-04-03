@@ -1,0 +1,72 @@
+#<_z_clearance> = 0.5
+#<_rampang>     = 5
+;#<_stepover>  = 0.08
+
+;#<_overlap> = 0
+
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+
+G20  ; G21 mm / G20 inch
+G10 L1 P1 Z0.0 R.125 ; set tool
+T1   ; set tool to T1
+M06  ; manual toolchange
+G54  ; absolute coordinates
+;F5   ; inch or mm/min (300 mm/min = about 1 ft/min)
+
+#<prog> = 1
+
+#<b> = .952
+#<w>    = 4.0
+#<bolt_r> = [2]
+
+
+o10 if [#<prog> EQ 1]
+	F3
+	o<drill_man> call [#<w>/2][-#<w>/2] [0.1][-0.5]
+
+	o<drill_man> call [#<w>/2+#<bolt_r>/SQRT[2]][-#<w>/2+#<bolt_r>/SQRT[2]] [0.1][-0.5]
+	o<drill_man> call [#<w>/2+#<bolt_r>/SQRT[2]][-#<w>/2-#<bolt_r>/SQRT[2]] [0.1][-0.5]
+	o<drill_man> call [#<w>/2-#<bolt_r>/SQRT[2]][-#<w>/2-#<bolt_r>/SQRT[2]] [0.1][-0.5]
+	o<drill_man> call [#<w>/2-#<bolt_r>/SQRT[2]][-#<w>/2+#<bolt_r>/SQRT[2]] [0.1][-0.5]
+	
+
+o10 elseif [#<prog> EQ 2]
+	F12
+	; exterior
+	o<pocket_circ> call [#<w>/2][-#<w>/2] [3.0] [0.02][-0.002]
+	F8
+	o<spquircle_boss> call [#<w>/2][-#<w>/2] [#<w>][2.8125] [0.02] [-0.125] [0.01]
+
+	; ream the holes
+	o<pocket_circ> call [#<w>/2+#<bolt_r>/SQRT[2]][-#<w>/2+#<bolt_r>/SQRT[2]] [.45] [0.1][-0.6] [0][+4]
+	o<pocket_circ> call [#<w>/2+#<bolt_r>/SQRT[2]][-#<w>/2-#<bolt_r>/SQRT[2]] [.45] [0.1][-0.6] [0][+4]
+	o<pocket_circ> call [#<w>/2-#<bolt_r>/SQRT[2]][-#<w>/2-#<bolt_r>/SQRT[2]] [.45] [0.1][-0.6] [0][+4]
+	o<pocket_circ> call [#<w>/2-#<bolt_r>/SQRT[2]][-#<w>/2+#<bolt_r>/SQRT[2]] [.45] [0.1][-0.6] [0][+4]
+	
+
+	; center pocket
+	o<spquircle_pocket> call [#<w>/2][-#<w>/2] [.95] [0.02][-.18] [0]
+	o<spquircle_pocket> call [#<w>/2][-#<w>/2] [.95] [-.18][-.36] [0]
+	o<spquircle_pocket> call [#<w>/2][-#<w>/2] [.95] [-.36][-.55] [0]
+	
+
+	; cleanup the corners
+	o<drill> call [#<w>/2+.38][-#<w>/2+.38] [0.02][-0.6]
+	o<drill> call [#<w>/2-.38][-#<w>/2+.38] [0.02][-0.6]
+	o<drill> call [#<w>/2-.38][-#<w>/2-.38] [0.02][-0.6]
+	o<drill> call [#<w>/2+.38][-#<w>/2-.38] [0.02][-0.6]
+
+	o<frame_rect> call [#<w>/2+#<b>/2][-#<w>/2+#<b>/2] [#<w>/2-#<b>/2][-#<w>/2-#<b>/2] [0.02][-.55]
+
+o10 elseif [#<prog> EQ 3]
+	F8
+	o<frame_rect> call [#<w>/2+#<b>/2][-#<w>/2+#<b>/2] [#<w>/2-#<b>/2][-#<w>/2-#<b>/2] [0.02][-.55]
+
+o10 endif
+
+
+M2 ; end program

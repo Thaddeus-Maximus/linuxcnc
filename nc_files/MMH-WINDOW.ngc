@@ -1,0 +1,38 @@
+#<_z_clearance> = 0.200
+#<_z_depth>       = -0.3
+
+M03 ; Start spindle
+F10 ; Feed
+
+; --- OPERATION 1: OUTER PROFILE & U-SLOT ---
+o<profile> sub
+    G0 Z#<_z_clearance>
+    G0 X5.75 Y0.3
+	G0 Z#1
+
+	G41 D1
+
+    G1 X5.25 Y0.25
+    G1 Y-0.75
+    G1 X10.75
+    G1 Y0.25
+
+    G0 Z#<_z_clearance>
+    G40
+o<profile> endsub
+
+G10 L1 P1 R[0.42/2]  ; Set tool 1 diameter
+F10
+o<profile> call [-0.1]
+o<profile> call [-0.25]
+
+G10 L1 P1 R[0.375/2]  ; Set tool 1 diameter
+F15
+o<profile> call [-0.25]
+
+
+;M00 ; Program Stop
+
+M05 ; Stop Spindle
+M30 ; End Program
+%

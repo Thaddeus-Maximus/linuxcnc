@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s \"L:\\\\configs\")",
+      "Bash(dir:*)",
+      "WebFetch(domain:github.com)"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+#<_z_clearance> = 1
+#<_rampang>     = 10
+;#<_stepover>  = 0.1
+
+;#<_overlap> = 0
+
+; mode refernce
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+
+G20  ; G21 mm / G20 inch
+G54  ; absolute coordinates
+
+#<op> = 2
+
+#<_td> = 0.5
+F12
+	o<pocket_circ> call [-3.5][-.5] [2] [0.1][-0.4] [0.0]
+	o<pocket_circ> call [-1.875][-.5] [0.52] [0.1][-0.4] [0.0]
+	o<pocket_circ> call [-5.125][-.5] [0.52] [0.1][-0.4] [0.0]
+
+	
+F8
+
+;o10 if [#<op> EQ 1]
+o<drill> call [-.5][-.5] [0.1][-0.3]
+;o<drill> call [-1.875][-.5] [0.1][-0.3]
+;o<drill> call [-3.500][-.5] [0.1][-0.3]
+;o<drill> call [-5.125][-.5] [0.1][-0.3]
+o<drill> call [-7.750][-.5] [0.1][-0.3]
+o<drill> call [-8.500][-.5] [0.1][-0.3]
+o<drill> call [-9.250][-.5] [0.1][-0.3]
+o<drill> call [-10.00][-.5] [0.1][-0.3]
+o<drill> call [-10.75][-.5] [0.1][-0.3]
+o<drill> call [-11.50][-.5] [0.1][-0.3]
+;o10 elseif [#<op> EQ 2]
+	
+;o10 endif
+
+
+M2 ; end program

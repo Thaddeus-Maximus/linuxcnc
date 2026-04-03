@@ -1,0 +1,2 @@
+2024-08-03 02:56:42,298 - QTvcp.QTVCP.LIB.QT_NGCGUI.NGCGUI - WARNING - The ngc_sub path does not exist: /home/linuxcnc/nc_files/ngcgui_lib/slot.ngc
+2024-08-03 02:56:42,299 - QTvcp.QTVCP.LIB.QT_NGCGUI.NGCGUI - WARNING - The ngc_sub path does not exist: /home/linuxcnc/nc_files/ngcgui_lib/qpocket.ngc

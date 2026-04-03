@@ -1,0 +1,22 @@
+#<_z_clearance> = 0.2
+#<rampang> =5
+
+M03
+
+F10
+
+#<_td> = [5/16]
+;o<drill_man> call [-5.45][-0.446]
+;o<drill_man> call [-2.975][-1.875]
+;o<drill_man> call [-5.45][-3.304]
+;<drill_man> call [-0.875][-1.125]
+;<drill_man> call [-0.875][-2.625]
+;o<drill_man> call [-15.25][0]
+;o<drill_man> call [-15.75][0]
+;o<drill_man> call [-16.25][0]
+;o<drill_man> call [-16.75][0]
+;o<drill_man> call [-17.25][0]
+o<frame_circ> call [-4.625][-1.875][1.720][0.05][-0.6]
+
+M05
+M30

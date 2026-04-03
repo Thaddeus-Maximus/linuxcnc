@@ -1,0 +1,64 @@
+G21  ; G21 mm / G20 inch
+G54  ; absolute coordinates
+
+#<_z_clearance> = 10
+#<_rampang>     = 20
+#<_td> = [3/16*25.4]
+
+; mode refernce
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+F150  ; inch or mm/min (300 mm/min = about 1 ft/min)
+
+
+#<xo> = 3
+
+#<y> = -12.5
+#<d> = 14.0
+
+#<operation> = 2
+
+o10 if [#<operation> EQ 1]
+	o<drill_man> call [#<xo>+  8][-54.0] ;m5
+	o<drill_man> call [#<xo>+ 73][-14.0] ;m5
+	o<drill_man> call [#<xo>+138][-54.0] ;m5
+	o<drill_man> call [-#<xo>-  8][-54.0] ;m5
+	o<drill_man> call [-#<xo>- 73][-14.0] ;m5
+	o<drill_man> call [-#<xo>-138][-54.0] ;m5
+	
+
+	o<drill_man> call [#<xo>+138][ -8.0] ;6mm
+
+	o<drill_man> call [#<xo>+ 41][-10]
+	o<drill_man> call [#<xo>+ 41][-50]
+	o<drill_man> call [#<xo>+105][-50]
+	o<drill_man> call [#<xo>+105][-10]
+
+	o<drill_man> call [-#<xo>-138][ -8.0] ;6mm
+
+	o<drill_man> call [-#<xo>- 41][-10]
+	o<drill_man> call [-#<xo>- 41][-50]
+	o<drill_man> call [-#<xo>-105][-50]
+	o<drill_man> call [-#<xo>-105][-10]
+
+o10 elseif [#<operation> EQ 2]
+	#<zt> = +1
+	#<zb> = -8
+
+	o<slot_chop> call [+#<xo>+41][-10] [#<xo>+41][-18] [5.1] [#<zt>][#<zb>]
+	o<slot_chop> call [+#<xo>+41][-50] [#<xo>+41][-58] [5.1] [#<zt>][#<zb>]
+	o<slot_chop> call [+#<xo>+105][-10] [#<xo>+105][-18] [5.1] [#<zt>][#<zb>]
+	o<slot_chop> call [+#<xo>+105][-50] [#<xo>+105][-58] [5.1] [#<zt>][#<zb>]
+	o<pocket_circ> call [+#<xo>+138][-8.0] [6.2] [#<zt>][#<zb>]
+
+	o<slot_chop> call [-#<xo>-41][-10] [-#<xo>-41][-18] [5.1] [#<zt>][#<zb>]
+	o<slot_chop> call [-#<xo>-41][-50] [-#<xo>-41][-58] [5.1] [#<zt>][#<zb>]
+	o<slot_chop> call [-#<xo>-105][-10] [-#<xo>-105][-18] [5.1] [#<zt>][#<zb>]
+	o<slot_chop> call [-#<xo>-105][-50] [-#<xo>-105][-58] [5.1] [#<zt>][#<zb>]
+	o<pocket_circ> call [-#<xo>-138][-8.0] [6.2] [#<zt>][#<zb>]
+o10 endif
+
+M2 ; end program

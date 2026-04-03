@@ -1,0 +1,131 @@
+o<end_bull> sub
+	; o<end_bull> call <0|2> <x> <y1><y2> <radius> <zstart><zend> <fincut> <mode>
+	#<side>   = #1
+	#<x>      = #2
+	#<ys>     = #3
+	#<ye>     = #4
+	#<r>      = #5
+	#<zt>     = #6
+	#<zb>     = #7
+	#<fincut> = #8
+	#<mode>   = #9
+
+	; right now only 0 and 2 work but hey that's most of what you'd do
+	; 0: +x side
+	; 1: +y side
+	; 2: -x side
+	; 3: -y side
+
+	;G10 L0 ; re-read tool data
+	G90	  ; absolute x,y,z
+	G91.1 ; incremental i,j,k
+	M101  ; enable Z-axis (M102 disables)
+	G17   ; select XY plane for arcs
+
+	#<M_CONVENTIONAL> = [FIX[#<mode>/1] MOD 2 EQ 1]
+	#<M_BOTHWAYS>     = [FIX[#<mode>/2] MOD 2 EQ 1]
+	#<M_PLUNGE>       = [FIX[#<mode>/4] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#<mode>/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#<mode>/1] MOD 2 EQ 0]
+	#<M_ONEWAY>       = [FIX[#<mode>/2] MOD 2 EQ 0]
+	#<M_HELIX>        = [FIX[#<mode>/4] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#<mode>/8] MOD 2 EQ 0]
+
+
+	#<td> = #<_td>
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #<r>
+	o1 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o3 else
+		#<stepover> = [#<td>*0.4]
+	o3 endif
+	o4 if [EXISTS[#<_overlap>]]
+		#<overlap> = #<_overlap>
+	o4 else
+		#<overlap> = [#<stepover>*0.4]
+	o4 endif
+
+	; make <c> the more +y position and <b> the more -y position
+	#<c> = #<ys>
+	#<b> = #<ye>
+	o5 if [#<ye> LT #<ys>]
+		#<c> = #<ye>
+		#<b> = #<ys>
+	o5 endif
+
+	; inputs:
+	; - climb/conv    (C)
+	; - angle pos/neg (A)
+	; - left or right (L)
+
+	; outputs:
+	; - #<b> or #<c>      (B) = L NE A
+	; - order of movement (O) = C NE A
+	; - sign of offsets   (S) = L
+
+	#<M_ANGLE> = [#<r> GE 0]
+	#<M_LEFT>  = [#<side> EQ 0]
+	#<SW_B> = [#<M_LEFT>  XOR #<M_ANGLE>] ; use #<b>
+	#<SW_O> = [#<M_CLIMB> XOR #<M_ANGLE>] ; order of movement
+
+	#<sign> = 0
+	o10 if [#<side> EQ 0]
+		#<sign> = 1
+	o10 elseif [#<side> EQ 2]
+		#<sign> = -1
+	o10 endif
+
+	#<origin> = #<b>
+	o11 if [#<SW_B>]
+		#<origin> = #<c>
+	o11 endif
+
+	#<sign_off> = 1
+	o12 if [#<M_ANGLE> NE 0]
+		#<sign_off> = -1
+		#<overlap> = [-#<overlap>]
+	o12 endif
+
+	G0 Z#<z_clearance>
+
+	o100 if [#<r> NE 0]
+		#<p1_x> = [#<x> - #<sign>*<r>]
+		#<p1_y> = [#<c> - #<tr>]
+
+		#<p2_x> = [#<x> + #<sign>*<tr>]
+		#<p2_y> = [#<c> - #<r>]
+
+		#<p3_x> = [#<x> + #<sign>*<tr>]
+		#<p3_y> = [#<b> + #<r>]
+
+		#<p4_x> = [#<x> + #<sign>*<tr>]
+		#<p4_y> = [#<b> + #<r>]
+
+		o101 if [#<sign_off> GT 0]
+			G0 X#<p1_x> Y#<p1_y>
+			G1 Z#<zb>
+			G2 X#<p2_x> Y#<p2_y>
+			G1 X#<p3_x> Y#<p3_y>
+			G2 X#<p4_x> Y#<p4_y>
+
+		o101 else
+			G0 X#<p4_x> Y#<p4_y>
+			G1 Z#<zb>
+			G3 X#<p3_x> Y#<p3_y>
+			G1 X#<p2_x> Y#<p2_y>
+			G3 X#<p1_x> Y#<p1_y>
+
+		o101 endif
+	o100 endif
+
+	G0 Z#<z_clearance>
+
+
+o<end_bull> endsub
+
+M2

@@ -1,0 +1,26 @@
+G10 L1 P1 Z0.0 R0.125 ; set tool P1 to Z-offset Z0.0 and radius R0.25
+T1   ; set tool to T1
+M06  ; manual toolchange
+
+M101 ; enable z-axis
+G90  ; absolute coordinates
+G54  ; fixture #1
+
+F5.0 ; feedrate
+
+
+
+o<drill> call [-2/2] [-3.875/2] [0.1] [-0.2]
+o<drill> call [+2/2] [-3.875/2] [0.1] [-0.2]
+o<drill> call [+2/2] [+3.875/2] [0.1] [-0.2]
+o<drill> call [-2/2] [+3.875/2] [0.1] [-0.2]
+
+o<drill> call [+0.75] [0] [0.1] [-0.2]
+o<drill> call [-0.75] [0] [0.1] [-0.2]
+o<drill> call [0] [-0.75] [0.1] [-0.2]
+o<drill> call [0] [+0.75] [0.1] [-0.2]
+
+
+
+
+M2 ; end program

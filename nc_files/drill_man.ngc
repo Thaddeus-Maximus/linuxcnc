@@ -1,0 +1,16 @@
+o<drill_man> sub
+	; x1, y1
+	; #1  #2
+
+	G90	  ; absolute x,y,z
+	M102  ; disable Z-axis (M101 enables)
+
+	;;;;;;;;;; PROGRAM ;;;;;;;;;
+
+	G0 X#1 Y#2
+
+	M0 ; pause
+
+o<drill_man> endsub
+
+M2

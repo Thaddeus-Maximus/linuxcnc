@@ -1,0 +1,15 @@
+G21  ; G21 mm / G20 inch
+G54  ; absolute coordinates
+
+M101
+
+F400
+
+G0 Z80
+G0 X52 Y20
+G0 Z0
+G1 Y-20
+G0 Z80
+G0 X60 Y20
+
+M2 ; end program

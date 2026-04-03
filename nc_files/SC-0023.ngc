@@ -1,0 +1,64 @@
+; STEERING SOCKET PROGRAM - SC-0027
+; Material: HDPE, Black (1.00" Thick)
+; Tool 1: 0.25" Endmill (for profile and pocket)
+; Tool 2: 0.4375" Drill (Pre-drill for 1/2-10 Acme)
+; Tool 3: 0.323" Drill (N Drill)
+
+#<_z_clearance> = 0.200
+#<_depth>       = -1.050 
+
+M03 ; Start spindle
+F15       ; feed for HDPE
+
+; --- OPERATION 1: OUTER PROFILE & U-SLOT ---
+o<profile> sub
+	X0 X0.5 Y0.5
+	G41 D1
+    G0 Z#<_z_clearance>
+    G0 X0 Y0 
+    G1 Z#1 F9 ; Step down in increments if necessary
+    ;G1 X0 Y-3.0 
+    ;G1 X0 Y0
+    ;G1 X0 Y-2.835
+    
+    G1 Y-0.515
+    G1 X-0.1 Y-0.615
+    G1 X-1.75
+    G3 Y-2.385 R[1.77/2]
+    G1 X-0.1
+    G1 X0 Y-2.485
+    G1 Y-3
+    
+;    G1 X-1.75 Y-2.835
+    ;G3 X Y-1.75 R0.885 ; The 1.770 wide arc (Radius = 0.885)
+ ;   G3 X-1.75 Y-0.615 R0.885
+  ;  G1 X0 Y-0.615
+    G0 Z#<_z_clearance>
+o<profile> endsub
+
+; --- OPERATION 2: DRILLING ---
+;o<drilling> sub
+    
+    ; .323 Thru Hole (Center X1.5, Y0.5)
+ ;   G0 X1.5 Y0.5
+
+;o<drilling> endsub
+
+G10 L1 P1 R[0.6/2]  ; Set tool 1 diameter to 0.125"
+o<profile> call [-0.5]
+;o<profile> call [-0.65]
+o<profile> call [-1.1]
+G10 L1 P1 R[0.5/2]  ; Set tool 1 diameter to 0.125"
+o<profile> call [-1.1]
+
+;M05
+;M30
+; --- OPERATION 3: LOCATE ACME TAP HOLE ---
+;G0 Z#<_z_clearance>
+;G0 X1.5 Y3.0
+(MSG, MANUALLY DRILL .375 AND TAP 1/2-10 ACME)
+M00 ; Program Stop
+
+M05 ; Stop Spindle
+M30 ; End Program
+%

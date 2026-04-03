@@ -1,0 +1,22 @@
+#<_z_clearance> = 1.0
+#<_rampang>     = 5
+
+G10 L1 P1 Z0.0 R0.25 ; set tool P1 (Z offset, R radius)
+T1   ; set tool to T1
+M06  ; manual toolchange
+
+M101 ; enable z-axis
+G90  ; absolute coordinates
+G54  ; fixture #1
+
+F5.0 ; feedrate
+
+#<d> = [80/SQRT[2]/2/25.4]
+
+o<drill_man> call [0][0]
+o<drill_man> call [-#<d>][-#<d>]
+o<drill_man> call [-#<d>][+#<d>]
+o<drill_man> call [+#<d>][+#<d>]
+o<drill_man> call [+#<d>][-#<d>]
+
+M2 ; end program

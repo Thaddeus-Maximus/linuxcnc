@@ -1,0 +1,25 @@
+o<drill_retr> sub
+	; x1, y1, z_clr
+	; #1  #2, #3
+
+	G90	  ; absolute x,y,z
+
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #3
+	o1 endif
+
+	;;;;;;;;;; PROGRAM ;;;;;;;;;
+
+	M101
+	G0 Z#<z_clearance>
+	G0 X#1 Y#2
+	M102  ; disable Z-axis (M101 enables)
+	M0 ; pause
+	M101
+	G0 Z#<z_clearance>
+
+o<drill_man_retract> endsub
+
+M2

@@ -1,0 +1,23 @@
+#<_z_clearance> = 1.0
+#<_rampang>     = 5
+
+;#<_overlap> = 0
+
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+
+G10 L1 P1 Z0.0 R0.25 ; set tool
+T1   ; set tool to T1
+M06  ; manual toolchange
+G54  ; absolute coordinates
+F10  ; 10 ft/min
+
+; cope a 1.315" OD tube
+
+o<drill_man> [-2+1.315/2]       [0.0]
+o<drill_man> [-2+1.315/2+1.375] [0.0]
+
+M2 ; end program

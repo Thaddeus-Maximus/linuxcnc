@@ -1,0 +1,26 @@
+#<_z_clearance> = +0.200 ; clearance height
+
+;M03 ; start spindle
+F12 ; feedrate
+
+;#<_td> = 0.5
+;M6 T1 ; tool 1: 1/2" endmill
+;G43
+M03
+G4 P1 ; wait 2 sec (spindle start)
+
+G0 Z#<_z_clearance>
+G0 X[-5.053] Y[-0.5]
+G0 Z0.02
+F10.0
+G1 X-6.063 Z-0.03
+G1 X-5.053 Z-0.08
+G1 X-6.063 Z-0.11
+G1 X-5.053 Z-0.14
+G1 X-6.063 Z-0.14
+
+
+M05 ; stop spindle
+M30 ; end program
+M2  ; also end program
+%

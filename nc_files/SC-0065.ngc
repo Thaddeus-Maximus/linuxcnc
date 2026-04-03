@@ -1,0 +1,32 @@
+#<_z_clearance> = 0.5
+#<_rampang>     = 10
+#<_td>  = [1/4]
+;#<_stepover>  = 0.1
+
+;#<_overlap> = 0
+
+; mode refernce
+; +1: Conventional milling
+; +2: Both-ways milling
+; +4: Plunge entry
+; +8: Outside
+
+
+G20  ; G21 mm / G20 inch
+G54  ; absolute coordinates
+
+;M03
+;F20
+
+#1=-4
+
+o<drill_man> call [#1+ 0.425] [-.5]
+o<drill_man> call [#1+ 1.125] [-.5]
+o<drill_man> call [#1+13.875] [-.5]
+o<drill_man> call [#1+14.575] [-.5]
+
+o<drill_man> call [#1 +5.178] [-.5]
+
+;M05
+
+M2 ; end program
