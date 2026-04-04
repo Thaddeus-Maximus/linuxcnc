@@ -158,6 +158,47 @@ G20 G40 G90 G94 G97 G64 P0.001
 - G97: RPM mode (constant spindle speed)
 - G64 P0.001: Path blending with 0.001" tolerance
 
+## Auto-Start Setup
+
+To have the machine boot straight into LinuxCNC with no interaction:
+
+### 1. Auto-login (optional)
+
+Create a systemd override for tty1:
+
+```bash
+sudo systemctl edit getty@tty1
+```
+
+Add:
+
+```ini
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin linuxcnc --noclear %I $TERM
+```
+
+### 2. Auto-start X11/dwm on login
+
+Add to `~/.bash_profile`:
+
+```bash
+if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+    startx
+fi
+```
+
+### 3. Auto-start LinuxCNC in dwm
+
+In `~/.xinitrc`:
+
+```bash
+linuxcnc ~/linuxcnc/configs/lagun_gmoccapy/lagun_gmoccapy.ini &
+exec dwm
+```
+
+Power on → auto-login → startx → dwm + LinuxCNC. A plain console is still available on tty2-6 (Ctrl+Alt+F2).
+
 ## E-Stop
 
 The estop signal is looped back internally (`user-enable-out` -> `emc-enable-in`). There is no external hardware estop chain connected through LinuxCNC. The physical ESTOP button on GPIO 029 is configured as an input but not wired into the estop logic.
