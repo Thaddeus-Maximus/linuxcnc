@@ -1,3 +1,6 @@
+; Slot/obround cut - cuts a slot (stadium shape) between two endpoints
+; Params: #1=x1, #2=y1, #3=x2, #4=y2, #5=width, #6=ztop, #7=zbot, #8=fincut, #9=mode
+; Mode bitmask: bit0=conventional, bit1=bothways, bit2=plunge(vs helix), bit3=outside
 o<slot> sub
 	; o<slot> call [x1][y1] [x2][y2] [width] [ztop][zbot] [fincut] [mode]
 
@@ -24,20 +27,21 @@ o<slot> sub
 		#<z_clearance> = #5
 	o1 endif
 
-	#<a> = [ATAN[#4-#2]/[#3-#1]]
+	#<a> = [ATAN[#4-#2]/[#3-#1]] ; slot angle from p1 to p2
 		
 	G0 Z#<z_clearance>
 
 	G0 X#1 Y#2
 	G0 Z#6
-	G1 Z#7
-	G1 X#3 Y#4
+	G1 Z#7         ; plunge to cut depth
+	G1 X#3 Y#4     ; cut centerline of slot
 
-	
-	#<r> = [[#5-#<_td>]/2]
 
+	#<r> = [[#5-#<_td>]/2] ; offset from centerline to slot edge (compensated for tool)
+
+	; Trace obround perimeter: two straights + two semicircles at each end
 	o100 if [#<M_CLIMB>]
-		o101 if [#8 GT 0]
+		o101 if [#8 GT 0] ; pre-finish pass offset inward by fincut
 		G1 X[#3 +[SIN[#<a>]*[#<r>-#8]]] Y[#4 -[COS[#<a>]*[#<r>-#8]]]			; point 1
 		G3 X[#3 -[SIN[#<a>]*[#<r>-#8]]] Y[#4 +[COS[#<a>]*[#<r>-#8]]] I#3 J#4  ; point 2
 		G1 X[#1 -[SIN[#<a>]*[#<r>-#8]]] Y[#2 +[COS[#<a>]*[#<r>-#8]]]          ; point 3

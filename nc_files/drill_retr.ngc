@@ -1,3 +1,6 @@
+; Semi-manual drill with Z retract - positions X/Y, retracts Z, pauses for manual drill
+; Params: #1=x, #2=y, #3=z_clearance
+; BUG: endsub name (drill_man_retract) doesn't match sub name (drill_retr)
 o<drill_retr> sub
 	; x1, y1, z_clr
 	; #1  #2, #3
@@ -12,12 +15,12 @@ o<drill_retr> sub
 
 	;;;;;;;;;; PROGRAM ;;;;;;;;;
 
-	M101
+	M101                  ; enable Z for CNC retract
 	G0 Z#<z_clearance>
 	G0 X#1 Y#2
 	M102  ; disable Z-axis (M101 enables)
-	M0 ; pause
-	M101
+	M0 ; pause for manual drilling
+	M101                  ; re-enable Z for retract
 	G0 Z#<z_clearance>
 
 o<drill_man_retract> endsub

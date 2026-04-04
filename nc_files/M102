@@ -1,4 +1,5 @@
 #!/bin/bash
+# M102: Disable CNC Z-axis control for manual quill operation (pair with M101 to re-enable)
 
 halcmd sets z-override False
 exit 0

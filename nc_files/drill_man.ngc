@@ -1,3 +1,5 @@
+; Manual drill positioning - moves to X/Y, disables Z for manual quill, then pauses
+; Params: #1=x, #2=y
 o<drill_man> sub
 	; x1, y1
 	; #1  #2

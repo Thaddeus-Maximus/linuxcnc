@@ -1,3 +1,6 @@
+; Circular pocket - clears a round pocket using spiral toolpath
+; Params: #1=x, #2=y, #3=diameter, #4=ztop, #5=zbot, #6=finishcut, #7=mode
+; Mode bitmask: bit0=conventional, bit1=bothways, bit2=plunge(vs helix), bit3=outside
 o<pocket_circ> sub
 	; o<pocket_circ> call [x][y] [diameter] [ztop][zbot] [finishcut] [mode]
 
@@ -33,15 +36,15 @@ o<pocket_circ> sub
 		#<stepover> = [#<td>*0.4]
 	o3 endif
 
-	o4 if [#<td> GT #3]
+	o4 if [#<td> GT #3] ; tool bigger than pocket, bail out
 		o5 return
 	o4 endif
 
 	#<a> = 0
 	#<r> = 0
 	o100 if [#<M_HELIX>] ; helical plunge
-		#<r> = [#<td>*0.3]
-		o115 if [[[#3-#<td>]/2-ABS[#6]] LE #<r>]
+		#<r> = [#<td>*0.3] ; helix radius = 30% of tool diameter
+		o115 if [[[#3-#<td>]/2-ABS[#6]] LE #<r>] ; shrink if helix would exceed pocket wall
 			#<r> = [[[#3-#<td>]/2-ABS[#6]]*0.8]
 		o115 endif
 
@@ -82,7 +85,7 @@ o<pocket_circ> sub
 
 	o100 endif
 
-	; do the spiral :)
+	; spiral outward from center to clear pocket, stopping short by finishcut amount
 	#<r_base> = #<r>
 	#<a_base> = #<a>
 	o105 while [#<r> LT [[#3-#<td>]/2-ABS[#6]]]
@@ -92,12 +95,12 @@ o<pocket_circ> sub
 		o106 else
 			G1 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>]
 		o106 endif
-		#<a> = [#<a>+1] ; next angle
+		#<a> = [#<a>+1] ; advance 1 degree per step
 
-		#<r> = [#<r_base>+[#<a>-#<a_base>]/360*#<stepover>] ; compute the radius accordingly
+		#<r> = [#<r_base>+[#<a>-#<a_base>]/360*#<stepover>] ; radius grows by stepover each revolution
 	o105 endwhile
 
-	; pre-finish cut
+	; pre-finish cut: full circle at pocket wall minus finishcut allowance
 	#<r> = [[#3-#<td>]/2-ABS[#6]]
 	o107 if [#<M_CLIMB>]
 		G1 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>]
@@ -107,18 +110,18 @@ o<pocket_circ> sub
 		G2 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>] I[#1] J[#2]
 	o107 endif
 
-	; finish cut
+	; finish cut: full circle at final pocket wall radius
 	o104 if [ABS[#6] GT 0.0]
 		#<r> = [[#3-#<td>]/2]
 		o108 if [#<M_CLIMB>]
 			G1 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>]
 			G3 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>] I[#1] J[#2]
-			#<r> = [[#3-#<td>]/2*0.9]
+			#<r> = [[#3-#<td>]/2*0.9] ; retract slightly inward before rapid out
 			G1 X[#1+COS[#<a>]*#<r>] Y[#2+SIN[#<a>]*#<r>]
 		o108 else
 			G1 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>]
 			G2 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>] I[#1] J[#2]
-			#<r> = [[#3-#<td>]/2*0.9]
+			#<r> = [[#3-#<td>]/2*0.9] ; retract slightly inward before rapid out
 			G1 X[#1+COS[#<a>]*#<r>] Y[#2-SIN[#<a>]*#<r>]
 		o108 endif
 	o104 endif

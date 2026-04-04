@@ -2,5 +2,6 @@
 # These connections are made after the GUI loads so gmoccapy pins exist
 
 # --- Tool offset display ---
+# Pass tool offset values to GMOCCAPY for DRO display
 net tooloffset-x  gmoccapy.tooloffset-x  <=  motion.tooloffset.x
 net tooloffset-z  gmoccapy.tooloffset-z  <=  motion.tooloffset.z

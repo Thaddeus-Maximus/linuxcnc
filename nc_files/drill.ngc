@@ -1,3 +1,5 @@
+; Peck drill subroutine - drills with retract cycles to clear chips
+; Params: #1=x, #2=y, #3=zstart, #4=zend, #5=peck_depth
 o<drill> sub
 	; x1, y1, zstart, zend, peckdp
 	; #1  #2  #3       #4     #5
@@ -20,9 +22,9 @@ o<drill> sub
 	o104 if [#5 NE 0] ; peck drilling
 		#<h> = #3
 		o101 while [#<h> GT #4]
-			G1 Z#<h>
-			G0 Z#3
-			G0 Z[#<h>+.02]
+			G1 Z#<h>       ; drill to current peck depth
+			G0 Z#3         ; retract to clear chips
+			G0 Z[#<h>+.02] ; rapid back down, stopping just above previous depth
 			#<h> = [#<h>-#5]
 		o101 endwhile
 	o104 endif

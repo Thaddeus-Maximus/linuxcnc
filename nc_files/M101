@@ -1,4 +1,5 @@
 #!/bin/bash
+# M101: Enable CNC Z-axis control via HAL signal (pair with M102 to disable)
 
 halcmd sets z-override True
 exit 0

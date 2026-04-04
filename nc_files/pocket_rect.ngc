@@ -1,9 +1,14 @@
+; Rectangular pocket - clears using spiral then corner-clearing helper sub
+; Params: #1=x1, #2=y1, #3=x2, #4=y2, #5=zstart, #6=zend, #7=fincut, #8=mode
+; Mode: 0=CCW/ramp, 1=CW/ramp, 2=CCW/plunge, 3=CW/plunge
+
+; pre-declare named params used across sub/helper scope
 #<a> = 0
 #<z> = 0
 #<td> = 0
 #<z_clearance> = 0
 #<rampang> = 0
-#<z_down>  = 0 
+#<z_down>  = 0
 #<z_lift>  = 0
 #<minx> = 0
 #<maxx> = 0
@@ -44,7 +49,7 @@ o<pocket_rect> sub
 	o3 endif
 
 	#<z_down> = #6
-	#<z_lift> = [#6+#<td>*0.1]
+	#<z_lift> = [#6+#<td>*0.1] ; slight lift for repositioning moves
 
 	#<minx> = #1
 	#<maxx> = #3
@@ -60,10 +65,10 @@ o<pocket_rect> sub
 		#<maxy> = #2
 	o12 endif
 
-	#<cx> = [[#<minx>+#<maxx>]/2]
-	#<cy> = [[#<miny>+#<maxy>]/2]
-	#<rx> = [[[#<maxx>-#<minx>]-#<td>]/2]
-	#<ry> = [[[#<maxy>-#<miny>]-#<td>]/2]
+	#<cx> = [[#<minx>+#<maxx>]/2]  ; pocket center X
+	#<cy> = [[#<miny>+#<maxy>]/2]  ; pocket center Y
+	#<rx> = [[[#<maxx>-#<minx>]-#<td>]/2] ; half-width minus tool radius
+	#<ry> = [[[#<maxy>-#<miny>]-#<td>]/2] ; half-height minus tool radius
 
 	G0 X#<cx> Y#<cy>
 	G1 X[#<cx>+#<rx>] Y[#<cy>-#<ry>]
@@ -109,7 +114,7 @@ o<pocket_rect> sub
 
 	o100 endif
 
-	; do the spiral :)
+	; spiral outward from center until hitting pocket boundary
 	#<r_base> = #<r>
 	#<a_base> = #<a>
 	o105 while [1]
@@ -152,7 +157,7 @@ o<pocket_rect> sub
 
 	
 
-	o<xp> call
+	o<xp> call ; clear corners that the spiral couldn't reach
 
 
 
@@ -165,6 +170,8 @@ o<pocket_rect> endsub
 ; idea: bias the main spiral. then you're left with a section to hog out
 ; idea 2: make angle arbitrary (blowing up the code so it's not x-y specific). That'll be fun.
 
+; Helper sub: clears rectangular corner material left by circular spiral
+; Walks along the X-axis edge, tracing arcs that match the spiral boundary
 o<xp> sub
 		#<ix> = 0
 		#<lastxx> = 0
@@ -174,7 +181,7 @@ o<xp> sub
 			G0 X#<cx> Y[#<cy> - #<ry>]
 			G1 Z#<z_down>
 
-			#<n_end> = FUP[sqrt[[#<ix>]**2 + [#<ry>]**2]/#<stepover>]
+			#<n_end> = FUP[sqrt[[#<ix>]**2 + [#<ry>]**2]/#<stepover>] ; spiral revolution number at this corner point
 			#<a> = ATAN[-#<ry>]/[#<ix>]
 			#<r_end> = [#<n_end>*#<stepover> + #<r_base>+[#<a>-#<a_base>]/360*#<stepover>]
 			#<r> = [#<ry>]

@@ -1,0 +1,1722 @@
+KA Series
+Closed linear grating scale
+GUANGZHOU LOKSHUN CNC EQUIPMENT LTD.
+
+Directory
+
+SINO
+
+Directory
+
+General Description................................................... ú-1
+
+Operating Guideline................................................... ú-2
+
+Safety Considerations................................................
+
+ú-3
+
+1. Technical Parameters...............................................
+
+1
+
+2. Encoder Structure..................................................
+
+3
+
+3. Optional Parts......................................................
+
+4
+
+4. Installation...........................................................
+
+7
+
+4.1 Installation Dimension ........................................... 7
+
+4.2 Principle of installation........................................... 11
+
+4.3 Installation of Encoder and Enclosure...................... 12
+
+4.4 Installation of Reading Head..................................
+
+15
+
+4.5 Switchover of Reading Head Cable.........................
+
+17
+
+5. Acceptance Rules..................................................... 18
+
+General Description
+
+SINO
+
+General Description
+Many thanks for your use of this series of encoder. It is China's most famous international brand. It will be your best bet once you choose it. SINO brand was initially founded in 1989. We are a professional factory dedicated to manufacture of encoder numerical display. By continuous modification and improvement through years of research and production, we have developed today's KA series linear encoder. The KA series encoder under this manual includes KA-300, KA-600, KA-500 and KA-200, which can meet the requirements in different applications.
+KA-300 is a type of encoder with wide applications. It features in optimal structure, good appearance and high rigidity, able to meet the needs of the majority of general machine users. The length is 70~1020mm.
+KA-600 encoder, which is specifically designed for large machine tool, features in large size and good rigidity. Support may be added to any position of the encoder to enhance the rigidity and stability. The length is 1000~3000mm.
+KA-500 is a mini-encoder specially designed for the machine tool which has a low installation size and small operation space. It can meet the needs of those customers who have requirements for position. The length is 70~470mm.
+KA-200, a mini-encoder smaller than KA-500, is designed based on kA-500 by optimizing the internal and external structure. It is suitable to the equipment on which the installation is restricted and the space is even smaller. The length is 30-360mm.
+
+I-1
+
+Operating Guideline
+
+SINO
+
+Operating Guideline
+z Before use, the user must read the General Description, Safety Considerations and all the contents in Chapter 1 ~ 3.
+z Except the General Description, Safety Considerations and all the contents in Chapter 1 ~ 3, the technicians for installation, testing and repair must thoroughly understand all the contents in Chapter 4~5.
+z This Operating Instructions is only applicable to SINO's KA series integrated linear encoder.
+z Please read the Safety Considerations below. It is critical information related to safe use of your linear encoder.
+
+I-2
+
+Safety Considerations
+
+SINO
+
+Safety Considerations
+Caution:  To avoid electric shock or fire, the equipment connected to encoder shall be kept
+from moisture or direct contact with cooling liquids.  Encoder is a precision measuring instrument. To ensure its normal function, never
+expose it to external shock or vibration. Warning:  To prevent mal-alignment of encoder and avoid electric shock, never open any seal
+on encoder. There is no part that needs the user's repair. Please ask the authorized technicians to repair. Notes : z If finding any smoke or smell from the reading head, please immediately cut off the power supply. As the encoder connects with the numerical display to form a precision measuring instrument, continued use in event of above phenomena might cause fire or electric shock to the numerical display. Please contact LOK SHUN CNC EQUIPMENT LTD. or its dealer. Never try to repair by yourself. z Once the wire between numerical display and encoder is broken or damaged during use, it will cause error to the test data. The user shall take special care on this. z Never try to repair or refit the scale, as it might cause failure, trouble or damage.
+
+The displacement sensor complies with 2006/95/EC directive for low-voltage electric apparatus and 2004/108/EC directive for EMC.
+Our company has passed the authorization and the audit of ISO9001 Quality System, ISO14001 Environmental System, OHSAS18001 Occupational Health and Safety System.
+I-3
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+In light of the principle focused on easy installation, use and maintenance by the user, LOK SHUN CNC EQUIPMENT LTD. has developed KA series linear encoder based on the condition of optimized structure and guaranteed precision. With a precision conforming to standard, this product features in good rigidity, straightness, sealing and appearance. The accessories and spare parts are easy to install and repair, resulting in largely reduced installation labors. Please read the following chapters thoroughly, so that you may use this device more easily.
+
+1. Technical Parameter
+
+1.1 Scaling distance: 0.02 mm (50lines /mm)
+
+1.2 Resolution: 5µma1µma0.5µm
+
+1.3 Precision: 3µma5µma15µm/m c200.1¥
+
+1.4 Measuring range: 30~3000mm
+
+1.5 Moving speed: High-speed encoder 120 m/min (To be customized)
+
+Ordinary encoder 60m/min
+
+1.6 Power supply: +5V±5%a80mA
+
+1.7 Cable length: Standard 3m (Special length available according to the user's needs)1
+
+1.8 Working Temperature: 0~45¥ 1.9 Pin Description:
+
+1
+
+5
+
+FG
+
+1) Applicable to: 9 pin socket RS-422 signal Output.
+
+6
+
+9
+
+Pin
+
+1
+
+2
+
+3
+
+4
+
+5
+
+67
+
+8
+
+9
+
+Position
+
+Signal A OV
+
+B Empty Z
+
+A +5V B
+
+Z
+
+Green
+
+Orange
+
+White
+
+Color
+
+Black
+
+FG
+
+Green Red Orange White
+
+Black
+
+black
+
+black
+
+FG: Shield connected to metal casing.
+
+1 Standard Cable Length for KA -200 Encoder:2m .
+1
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+2) Applicable to: 9 pin socket TTL signal Output.
+
+Pin
+
+1
+
+2
+
+3
+
+4
+
+Position
+
+Signal Empty OV Empty Empty
+
+Color  Black 
+
+FG
+
+FG: Shield connected to metal casing.
+
+5
+Empty 
+
+6
+
+7
+
+A +5V
+
+Green Red
+
+6
+
+7 1
+
+8
+B
+Orange
+
+9
+Z
+White
+
+3) Applicable to: 7 pin socket TTL signal Output.
+
+Pin Position 1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+Signal
+
+OV Empty A
+
+B +5V Z Shield
+
+Color Black  Green Orange Red White 
+
+1.10 Signal Waveform
+
+TTL signal Output:
+
+RS-422 signal Output:
+
+Signal Cycle
+
+A
+
+5V
+
+B 90¢Phase Difference Z
+
+Signal Cycle A A B B
+Z Z
+
+1.11 Encoder Zero Position: 1 every 50mm
+
+1.12 Output pulse signal cycle of encoder PW
+
+Resolution Equivalent per pulse PW
+
+5µm
+
+20µm
+
+1µm
+
+4µm
+
+pw
+
+0.5µm
+
+2µm
+
+2
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+2. Encoder Structure:
+
+The encoder mainly consists of scaling body and reading head, as shown in Fig.1:
+
+KA-300
+
+1
+
+EncoderMounting
+
+Hole
+
+Sealing Strip
+
+4
+
+2 Encoder End Cover
+
+Tightening Screw Adjusting Screw 3 Reading Head Mounting Hole
+
+KA-600
+
+1
+
+Sealing Strip
+
+Encoder End Cover
+
+4
+
+Tightening Screw
+
+Adjusting Screw 3
+
+KA-500
+
+2 Reading Head Mounting Hole 1
+
+Encoder Mounting Hole
+
+4 Encoder End Cover
+Tightening Screw
+Adjusting Screw
+
+Encoder Mounting Hole Sealing Strip
+2 Reading Head Mounting Hole 3
+
+3
+
+Optical grating linear encoder (Operating Instructions)
+
+KA-200
+
+
+
+SINO
+
+Encoder End Cover  Tightening Screw
+
+Encoder Mounting Hole Sealing Strip
+  Reading Head Mounting Hole
+
+Fig. 1 1. Scaling body 2. Cable 3. Read head 4. Connection plate fixing the reading
+head 3. Optional Parts
+To install and use the encoder normally under different conditions, we have designed the following spare parts: KA-300:
+
+KA-300-D Full
+Enclosure
+Fig. 2
+KA-300-B Full
+Enclosure
+Fig. 5
+
+KA-300-X Full
+Enclosure
+Fig. 3
+
+KA-300-C Full
+Enclosure
+Fig. 4
+
+KA-300 Supporting Plate
+Fig. 6
+
+4
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+KA-600:
+
+KA-300 Supporting Plate (B Type)
+Fig. 7
+
+KA-600M Enclosure
+
+KA-500:
+
+Fig. 8
+
+KA-500-H Full Enclosure
+Fig.10
+KA-200:
+
+KA-200 Full Enclosure
+Fig. 12
+
+KA600 Hanging Plate
+Fig. 9
+KA-500 Supporting Plate
+Fig. 11
+KA-200 Semi-Enclosure
+Fig. 13
+5
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+KA-200 Supporting Plate
+Fig. 14
+General Parts for Installation: T-Type Frame A, B, C, D, E
+
+10 40 22 10 5 4
+
+10 4
+140 T-type Frame A
+
+R3
+
+6
+
+68
+
+6.3
+
+2_M5
+
+14 0.075 68 0.15
+
+8 40
+4 25
+
+10
+84
+6.3 2_M4 68 0.15
+
+50
+
+14 0.075 68 0.15
+
+T-type Frame B
+
+6.3
+2_M5
+6
+
+129 1
+
+100
+
+75 31 24
+
+15
+
+68
+
+6.3
+
+5 2_M5
+
+82
+
+6.3
+T-Type Frame Extension Plate C
+
+2-M4 R3
+R3
+
+10 31 36
+6.3
+15 2-M4 72 5
+14
+
+10
+
+6
+
+68
+
+5 2_4
+
+82
+
+T-Type Extension Plate D
+
+Fig. 15
+
+10 T-Type Frame E
+
+6
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+4. Installation
+
+4.1 Installation Dimension
+
+Overall Dimension of KA-300 Encoder
+
+2-M4
+
+8 6
+
+12.5
+
+68.0 6
+
+34.5
+
+62.5
+
+62.5
+
+37 0.5
+
+12 8 8
+
+25.0
+
+2-M4
+
+68.0
+
+21.0
+
+82.0
+
+25.0
+
+L0
+
+L1
+
+L2
+
+Fig.16
+
+Model
+
+L0
+
+L1
+
+L2
+
+Model
+
+L0
+
+L1
+
+L2
+
+KA300-70
+
+70
+
+160
+
+176
+
+KA300-570
+
+570
+
+660
+
+676
+
+KA300-120
+
+120
+
+210
+
+226
+
+KA300-620
+
+620
+
+710
+
+726
+
+KA300-170
+
+170
+
+260
+
+276
+
+KA300-670
+
+670
+
+760
+
+776
+
+KA300-220
+
+220
+
+310
+
+326
+
+KA300-720
+
+720
+
+810
+
+826
+
+KA300-270
+
+270
+
+360
+
+376
+
+KA300-770
+
+770
+
+860
+
+876
+
+KA300-320
+
+320
+
+410
+
+426
+
+KA300-820
+
+820
+
+910
+
+926
+
+KA300-370
+
+370
+
+460
+
+476
+
+KA300-870
+
+870
+
+960
+
+976
+
+KA300-420
+
+420
+
+510
+
+526
+
+KA300-920
+
+920
+
+1010
+
+1026
+
+KA300-470
+
+470
+
+560
+
+576
+
+KA300-970
+
+970
+
+1060
+
+1076
+
+KA300-520
+
+520
+
+610
+
+626
+
+KA300-1020
+
+1020
+
+1110
+
+1126
+
+L0: Effective measuring length of encoder L1: Dimension of encoder mounting hole
+
+L2: Encoder overall dimension
+
+7
+
+Optical grating linear encoder (Operating Instructions)
+Overall Dimension of KA-600 Encoder
+1000 2-M4
+68 1000
+
+SINO
+
+25
+
+45
+
+71
+
+42 0.5
+
+25
+
+8
+
+2-M5
+
+68
+
+21
+
+82
+
+30 32
+
+L0
+
+L1
+
+L2
+
+Fig.17
+
+Model
+
+L0
+
+L1
+
+L2
+
+Model
+
+L0
+
+L1
+
+L2
+
+KA600-1000
+
+1000
+
+1150
+
+1170
+
+KA600-2100
+
+2100
+
+2250
+
+2270
+
+KA600-1100
+
+1100
+
+1250
+
+1270
+
+KA600-2200
+
+2200
+
+2350
+
+2370
+
+KA600-1200
+
+1200
+
+1350
+
+1370
+
+KA600-2300
+
+2300
+
+2450
+
+2470
+
+KA600-1300
+
+1300
+
+1450
+
+1470
+
+KA600-2400
+
+2400
+
+2550
+
+2570
+
+KA600-1400
+
+1400
+
+1550
+
+1570
+
+KA600-2500
+
+2500
+
+2650
+
+2670
+
+KA600-1500
+
+1500
+
+1650
+
+1670
+
+KA600-2600
+
+2600
+
+2750
+
+2770
+
+KA600-1600
+
+1600
+
+1750
+
+1770
+
+KA600-2700
+
+2700
+
+2850
+
+2870
+
+KA600-1700
+
+1700
+
+1850
+
+1870
+
+KA600-2800
+
+2800
+
+2950
+
+2970
+
+KA600-1800
+
+1800
+
+1950
+
+1970
+
+KA600-2900
+
+2900
+
+3050
+
+3070
+
+KA600-1900
+
+1900
+
+2050
+
+2070
+
+KA600-3000
+
+3000
+
+3150
+
+3170
+
+KA600-2000
+
+2000
+
+2150
+
+2170
+
+L0: Effective measuring length of encoder L1: Dimension of encoder mounting hole
+
+L2: Encoder overall dimension
+
+8
+
+Optical grating linear encoder (Operating Instructions)
+Overall Dimension of KA-500 Encoder
+6 4
+
+SINO
+
+3.5
+
+18
+
+20
+
+43
+
+25.2±0.3 43.5
+
+20
+
+2-M3
+
+56
+
+14
+
+70
+
+L0
+
+L1
+
+L2
+Fig.18
+
+Model
+
+L0
+
+L1
+
+L2
+
+KA500-70
+
+70
+
+172
+
+182
+
+KA500-120
+
+120
+
+222
+
+232
+
+KA500-170
+
+170
+
+272
+
+282
+
+KA500-220
+
+220
+
+322
+
+332
+
+KA500-270
+
+270
+
+372
+
+382
+
+L0: Effective measuring length of encoder
+
+L2: Encoder overall dimension
+
+Model
+
+L0
+
+L1
+
+L2
+
+KA500-320
+
+320
+
+422
+
+432
+
+KA500-370
+
+370
+
+472
+
+482
+
+KA500-420
+
+420
+
+522
+
+532
+
+KA500-470
+
+470
+
+572
+
+582
+
+L1: Dimension of encoder mounting hole
+
+9
+
+Optical grating linear encoder (Operating Instructions)
+Overall Dimension of KA-200 Encoder
+L1
+
+SINO
+
+5
+
+8
+
+3.2
+
+56
+
+2-M4
+
+6
+
+L2
+
+L1
+
+L0
+
+16
+
+20.1±0.2 32.5 13 16 32
+
+4.5
+
+7.5
+
+3.2 6
+
+56 74
+Fig.19
+
+2- 4.2
+
+14
+
+Model
+
+L0
+
+L1
+
+L2
+
+KA200-30
+
+30
+
+125
+
+133
+
+KA200-40
+
+40
+
+135
+
+143
+
+KA200-50
+
+50
+
+145
+
+153
+
+KA200-60
+
+60
+
+155
+
+163
+
+KA200-70
+
+70
+
+165
+
+173
+
+KA200-80
+
+80
+
+175
+
+183
+
+KA200-90
+
+90
+
+185
+
+193
+
+KA200-100 100
+
+195
+
+203
+
+KA200-110 110
+
+205
+
+213
+
+KA200-120 120
+
+215
+
+223
+
+KA200-130 130
+
+225
+
+233
+
+KA200-140 140
+
+235
+
+243
+
+KA200-150 150
+
+245
+
+253
+
+L0: Effective measuring length of encoder
+
+L2: Encoder overall dimension
+
+Model
+
+L0
+
+L1
+
+L2
+
+KA200-160
+
+160
+
+255
+
+263
+
+KA200-170
+
+170
+
+265
+
+273
+
+KA200-180
+
+180
+
+275
+
+283
+
+KA200-190
+
+190
+
+285
+
+293
+
+KA200-200
+
+200
+
+295
+
+303
+
+KA200-220
+
+220
+
+315
+
+323
+
+KA200-240
+
+240
+
+335
+
+343
+
+KA200-260
+
+260
+
+355
+
+363
+
+KA200-280
+
+280
+
+375
+
+383
+
+KA200-300
+
+300
+
+395
+
+403
+
+KA200-320
+
+320
+
+415
+
+423
+
+KA200-340
+
+340
+
+435
+
+443
+
+KA200-360
+
+360
+
+455
+
+463
+
+L1: Dimension of encoder mounting hole
+
+Note: (1) Select the measuring range of encoder according to the travel of machine tool. The measuring range of encoder must be higher than the maximum travel of
+10
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+the machine tool.
+
+(2) Select proper parts according to the length and mounting plane provided.
+
+(3) The hanging plate needed for KA-600 encoder shall be arranged every 1000mm, respectively 2 hanging plates if 1000L<2000; 3 plates if 2000L<3000; and 4 plates if L=3000.
+
+4.2 Principle of Installation:
+
+(1) The encoder must be installed with the guide rail of machine tool as the benchmark and be kept in parallel. The center of encoder measuring range must be positioned on the center of travel of machine tool. Ensure that the actual measuring range of encoder is higher than the maximum travel of machine tool.
+
+(2) The installation shall be based on priority principle as such that the encoder shall be installed close to the drive screw of machine tool. After installation, the body of encoder moves with the work bench, while the reading head is fixed on the machine tool.
+
+(3) The encoder shall be so installed that it will not obstacle the operation or reduce the function of machine tool.
+
+(4) After installation, the encoder shall be kept from knock. During machining, it shall not obstacle the handle of machine tool or affect the brake or other protrusions. It is not easy to contact when a work piece drops.
+
+(5) The encoder shall be vertically installed, as shown in Fig.20. But wherever impermissible, horizontal installation is also acceptable. Never install the encoder upside down (that is, reading head on top and encoder body at lower). Never direct the rubber seal of encoder toward the outlet of cooling oil from machine tool.
+
+Fig 20
+11
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+(6) The encoder enclosure shall be securely earthed to ensure the signal integrity.
+
+(7) The parallelism and verticality between encoder and guide rail of machine tool shall be within 0.10 mm/m.
+
+4.3 Installation of Encoder and its Enclosure
+
+(1) Installation of KA-300C Enclosure Encoder
+
+L0+125
+
+6
+
+28
+
+1 31 8
+8 12 11 60 73.7
+
+2-M5
+
+21 25
+a. Select proper installation position;
+b. Mark line on the mounting plane according to the length of installation, and drill M4 mounting hole.
+c. Install the encoder onto mounting plane. Use the dial gauge to check the parallelism between encoder and guide rail of machine tool, and adjust it to best state. (See Fig. 21)
+90 0 10
+
+70 80 40 50 60
+
+20 30 40 50 60
+
+90 0 10 20 30
+
+70 80
+
+d. Fix the encoder onto mounting plane.
+
+Fig .21
+
+e. Adjust the screw fixing the reading head, making it slightly touch the mounting plane.
+
+f. Drill M4 screw hole according to the mounting hole on reading head.
+
+g. Fix the reading head and remove the connection plate.
+
+h. Drill M4 screw hole according to the mounting hole on encoder enclosure.
+
+i. Fix the encoder onto mounting
+12
+
+plane.
+
+Optical grating linear encoder (Operating Instructions)
+(2) KA-200 Semi-enclosure Encoder:
+L+80 18.5
+
+SINO
+
+3.25 2.3
+3±1 42.4
+30.8
+
+56
+
+14
+
+74
+
+16
+
+The installation method is same as that for KA-300C enclosure encoder.
+
+(3) KA-300B Enclosure Encoder
+
+L0+125
+
+6
+
+40
+
+23.5
+
+40.5
+
+62.5
+
+8 12 370.5
+
+31 8
+
+25
+
+2-M5
+
+68
+
+21
+
+82
+
+25
+
+a. Select proper installation position
+
+b. Mark line on the mounting plane according to the mounting dimension of reinforced support plate for B-type enclosure. Drill M4 screw hole.
+
+c. Fix the reinforced support plate slightly onto mounting plane. Use dial gauge to
+
+check the parallelism between reinforced support plate and guide rail of machine
+
+tool, and adjust it to best state. (Fig. 22)
+
+90 0 10
+
+70 80
+
+20 30
+
+20 30 40 50 60
+
+40 50 60
+
+90 0 10
+
+70 80
+d. Fix the reinforced support plate onto mounting plane.
+
+e. Install the encoder onto reinforced support plate.
+
+Fig .22
+
+f. Adjust the screw fixing the reading head, making it slightly touch the mounting plane.
+
+13
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+g. Drill M4 screw hole according to the mounting hole on reading head.
+
+h. Fix the reading head and remove the connection plate.
+
+i. Fix the encoder onto reinforced support plate.
+
+(4) Installation of D, X & H Enclosure and KA-200 Full-enclosure Encoder
+
+KA-300D Enclosure Encoder:
+
+L0+139
+
+L0+135
+
+6
+
+39
+
+31 8
+8 12 37 0.5 63.7
+
+2-M5
+
+68 82
+KA-300X Enclosure Encoder:
+
+L0+139
+
+L0+135
+
+6
+
+39
+
+31 8
+8 12 37 0.5 63.7
+
+2-M5
+
+68 82
+
+14
+
+Optical grating linear encoder (Operating Instructions)
+KA-500H Enclosure Encoder:
+L0+134
+
+20.5
+
+SINO
+
+45.3 24.2
+
+43.5
+
+20
+
+56 70
+KA-200 Full-Enclosure Encoder:
+L+133
+
+14 18
+24.5
+
+36.1 20.5
+
+56
+
+14
+
+74
+
+16
+
+The installation method is same as that for KA-300B enclosure encoder.
+
+(5) Installation of KA-600M Enclosure Encoder
+L0+240
+
+43
+
+73
+
+79
+
+25
+
+21 30 32
+4.4 Installation of Reading Head
+The reading head may be positively or reversely installed on the machined or non-machined plane. Generally, positive installation is used. The reverse installation is used only when the installation space is not enough and it is not easy to install positively.
+(1) Positive Installation of Reading Head
+Shown in Fig. 23 is positive installation of reading head. During installation, take care
+15
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+that the encoder plane shall be kept parallel to the reading head plane and that their sectional centers shall be kept consistent, with an error within 0.10mm.
+
+(2) Reverse Installation of Reading Head
+
+Shown in Fig. 24 is reverse installation of reading head. The installation steps are as follows:
+
+a. Install T-frame (optional) onto machine tool.
+
+b. Remove the connection plate fixing the reading head.
+
+c. Adjust the tightening screw on T-frame mounting plate, making it slightly touch the reading head.
+
+d. Use front and rear M5 screw to fix the reading head onto mounting plate of T-frame.
+
+e. Adjust the position of T-frame plates, making the reading head in a relative position to the encoder as shown in Fig. 24.
+f. Install the encoder by using T-frame.
+
+Adjusting Screw
+
+Non-machined mounting plane
+
+I
+
+Adjusting screw
+
+Fig. 23
+
+3 0.5
+
+Fig .24
+
+16
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+4.5 Switchover of Reading Head Cable (Applicable to KA-300, KA-500 and
+
+KA-600)
+
+Upon shipment, left or right outlet is
+
+available for the reading head cable
+
+according to different specifications. You may change the direction of the
+
+Adjusting Hole
+
+cable if needed. The steps are as
+
+follows:
+
+(1) Loosen and remove 4 cross-head screws M2 fixing the reading head cover and 2 adjusting screws M3 on the right side of reading head.
+
+(2) Put 2 socket hexagonal screws M4 into the adjusting screw hole and screw forward respectively to prop up the cover plate. When there is a clearance, use screwdriver to prize up the cover plate along the edge of reading head.
+
+(3) Loosen 2 slotted-head screws M3 fixing the cable on the bottom of reading head. Remove the cable and terminal. Change the direction.
+
+(4) Before reinstalling the cover plate, remove the original sealing glue before applying new sealing glue.
+
+(5) Remove socket hexagonal screw M4. Reinstall the cover plate and tighten 4 cross-head screws M2.
+
+Note: To avoid slippery of screw head, please use correct tools in each step.
+
+End Tighteningscrew
+
+Tightening screw
+
+Note: The cable on KA-200 reading head is factory installed on right side. Installation on left side is available if requested.
+
+17
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+5. Acceptance Rules
+
+5.1 The connection of reading head shall have adequate rigidity. Shaking with force and observing the numerical display, the value shown on it will have some deviation. If releasing your hand, the value on numerical display shall be able to resume to original value.
+
+5.2 The reading head shall located at the center of encoder, so that the sealing strip may close or open symmetrically, as shown.
+
+5.3 The connecting plate may guarantee the position of reading head in encoder center and its relative position to encoder body.
+
+5.4 The position of reading head relative to encoder and its mounting dimension are shown below.
+
+The distance between read head and scaling body is 3mm  0.5mm.
+
+Permissible angle tolerance is ±0.2mm.
+
+18
+
+Optical grating linear encoder (Operating Instructions)
+
+SINO
+
+Permissible angle tolerance is ±0.2mm.
+
+Permissible horizontal offset is ±0.2mm.
+
+Permissible angle tolerance is ±0.2mm.
+
+19
+
+LOK SHUN CNC EQUIPMENT LTD.
+http://www.sino-ld.com
+AddNo.17 Yunjun Road,Luogang District,Guangzhou
+p.c510530 Tel02066839300 Fax02066839301 Hotline400-111-8148 E-mailinfos@sino-ld.com
+
+

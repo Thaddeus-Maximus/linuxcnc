@@ -1,3 +1,7 @@
+; Circle perimeter cut - cuts inside or outside a circular profile
+; Params: #1=x, #2=y, #3=diameter, #4=ztop, #5=zbot, #6=fincut, #7=mode
+; Mode bitmask: bit0=conventional, bit1=bothways, bit2=plunge(vs helix), bit3=outside
+; Uses arc lead-in/lead-out for smooth entry and exit
 o<frame_circ> sub
 	; o<frame_circ> call [x][y] [diameter] [ztop][zbot] [fincut] [mode]
 
@@ -25,7 +29,7 @@ o<frame_circ> sub
 	o1 endif
 
 
-	#<r_entry> = #<tr>
+	#<r_entry> = #<tr> ; lead-in arc radius, capped at 15% of diameter
 	o10 if [#<r_entry> GT #3*0.15]
 		#<r_entry> = [#3*0.15]
 	o10 endif
