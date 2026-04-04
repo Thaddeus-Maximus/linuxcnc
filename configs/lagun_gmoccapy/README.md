@@ -167,15 +167,13 @@ To have the machine boot straight into LinuxCNC with no interaction:
 Create a systemd override for tty1:
 
 ```bash
-sudo systemctl edit getty@tty1
-```
-
-Add:
-
-```ini
+sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
+sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf << 'EOF'
 [Service]
 ExecStart=
 ExecStart=-/sbin/agetty --autologin linuxcnc --noclear %I $TERM
+EOF
+sudo systemctl daemon-reload
 ```
 
 ### 2. Auto-start X11/dwm on login
