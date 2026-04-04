@@ -1,0 +1,18 @@
+#<_z_clearance> = +0.200 ; clearance height
+#<_td> = 0.25
+
+M03 ; start spindle
+G4 P2 ; wait for spin up
+
+F5
+o<drill> call [4.46/2][0] [0.05][-0.15]
+o<drill> call [-4.46/2][0] [0.05][-0.15]
+o<frame_circ> call [0][0] [2.5] [0.05][-0.15] [0] [+4]
+o<frame_circ> call [0][0] [6.0] [0.05][-0.15] [0] [+4+8]
+
+
+M05 ; stop spindle
+;G0 X-8
+M30 ; end program
+M2  ; also end program
+%
