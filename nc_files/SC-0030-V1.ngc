@@ -3,7 +3,6 @@
 ;M03 ; start spindle
 F12 ; feedrate
 
-#<_td> = 0.5
 M6 T1 ; tool 1: 1/2" endmill
 G43
 M03
@@ -11,27 +10,27 @@ G4 P1 ; wait 2 sec (spindle start)
 
 ; drive end
 ;G0 Z#<_z_clearance>
-;G0 X[#<_td>/2] Y[#<_td>/4]
+;G0 X[#5410/2] Y[#5410/4]
 ;G0 Z-0.65
-;G1 Y[-0.5-#<_td>/4]
+;G1 Y[-0.5-#5410/4]
 
 ; drive flat
 G0 Z#<_z_clearance>
-G0 X[-.4375+#<_td>/2] Y0.15
+G0 X[-.4375+#5410/2] Y0.15
 G0 Z-.115
 G1 Y-.6
 
 ; dead flat
 G0 Z#<_z_clearance>
-G0 X[-5.625-#<_td>/2] Y0.15
+G0 X[-5.625-#5410/2] Y0.15
 G0 Z-.08
 G1 Y-.6
 
 ; drive end
 ;G0 Z#<_z_clearance>
-;G0 X[-5.875-#<_td>/2] Y[-0.5-#<_td>/4]
+;G0 X[-5.875-#5410/2] Y[-0.5-#5410/4]
 ;G0 Z-0.65
-;G1 Y[#<_td>/4]
+;G1 Y[#5410/4]
 
 M05
 G0 X-8

@@ -1,7 +1,5 @@
 #<_z_clearance> = 0.4
 #<rampang> = 10
-#<_td> = 0.125
-
 M03
 G4 P0.5
 

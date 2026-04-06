@@ -32,18 +32,30 @@ F20  ; feedrate in mm/min or in/min
 #20 = 31.5
 
 o<m6cb> sub
-	o<pocket_circ> call [#1/25.4][#2/25.4] [0.415] [+.02][-.26] [0][+4]
-	o<pocket_circ> call [#1/25.4][#2/25.4] [0.250] [-.20][-.53] [0][+4]	
+	#<_z_top> = +.02
+	#<_z_bot> = -.26
+	o<pocket_circ> call [+4] [#1/25.4][#2/25.4] [0.415] [0]
+	#<_z_top> = -.20
+	#<_z_bot> = -.53
+	o<pocket_circ> call [+4] [#1/25.4][#2/25.4] [0.250] [0]
 o<m6cb> endsub
 
 o<m5cb> sub
-	o<pocket_circ> call [#1/25.4][#2/25.4] [0.35] [+.02][-.20] [0][+4]
-	o<pocket_circ> call [#1/25.4][#2/25.4] [0.20] [-.19][-.53] [0][+4]	
+	#<_z_top> = +.02
+	#<_z_bot> = -.20
+	o<pocket_circ> call [+4] [#1/25.4][#2/25.4] [0.35] [0]
+	#<_z_top> = -.19
+	#<_z_bot> = -.53
+	o<pocket_circ> call [+4] [#1/25.4][#2/25.4] [0.20] [0]
 o<m5cb> endsub
 
 o<m5cb_b> sub
-	o<pocket_circ> call [#1/25.4][#2/25.4] [0.40] [+.02][-.30] [0][+4]
-	o<pocket_circ> call [#1/25.4][#2/25.4] [0.20] [-.29][-.53] [0][+4]	
+	#<_z_top> = +.02
+	#<_z_bot> = -.30
+	o<pocket_circ> call [+4] [#1/25.4][#2/25.4] [0.40] [0]
+	#<_z_top> = -.29
+	#<_z_bot> = -.53
+	o<pocket_circ> call [+4] [#1/25.4][#2/25.4] [0.20] [0]
 o<m5cb_b> endsub
 
 o<carray> sub
@@ -84,7 +96,7 @@ o10 if [#<side> EQ 1]
 	o11 endwhile
 	
 
-	#<tr> = [#<_td>/2]
+	#<tr> = [#5410/2]
 
 	#<xe> = [-605/25.4]
 	#<y> = [-2.9]
@@ -112,9 +124,13 @@ o10 elseif [#<side> EQ 2]
 
 o<dhole> sub
 	F20
-	o<pocket_circ> call [#1/25.4][#2/25.4] [17.0/25.4] [+.02][-.086] [0.02] [+4]
+	#<_z_top> = +.02
+	#<_z_bot> = -.086
+	o<pocket_circ> call [+4] [#1/25.4][#2/25.4] [17.0/25.4] [0.02]
 	F10
-	o<pocket_circ> call [#1/25.4][#2/25.4] [10.0/25.4] [-.08][-.530] [0.005] [+4]
+	#<_z_top> = -.08
+	#<_z_bot> = -.530
+	o<pocket_circ> call [+4] [#1/25.4][#2/25.4] [10.0/25.4] [0.005]
 o<dhole> endsub
 
 	o<dhole> call [#<x>][#<y>]

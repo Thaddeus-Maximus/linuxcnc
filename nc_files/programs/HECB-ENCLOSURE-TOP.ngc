@@ -19,16 +19,34 @@ F12  ; inch or mm/min (300 mm/min = about 1 ft/min)
 
 #<da> = [12/25.4]
 
-o<pocket_circ> call [-0.394][+.787] [#<da>] [#<zt>][#<zb>] [0][4]
-o<pocket_circ> call [-1.181][+.787] [#<da>] [#<zt>][#<zb>] [0][4]
-o<pocket_circ> call [-1.181][-.787] [#<da>] [#<zt>][#<zb>] [0][4]
-o<pocket_circ> call [-0.394][-.787] [#<da>] [#<zt>][#<zb>] [0][4]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [4] [-0.394][+.787] [#<da>] [0]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [4] [-1.181][+.787] [#<da>] [0]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [4] [-1.181][-.787] [#<da>] [0]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [4] [-0.394][-.787] [#<da>] [0]
 
-o<drill> call [-2.990][+1.480] [#<zt>][#<zb>]
-o<drill> call [-1.769][+1.480] [#<zt>][#<zb>]
-o<drill> call [-1.769][-1.480] [#<zt>][#<zb>]
-o<drill> call [-2.990][-1.480] [#<zt>][#<zb>]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<drill> call [-2.990][+1.480]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<drill> call [-1.769][+1.480]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<drill> call [-1.769][-1.480]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<drill> call [-2.990][-1.480]
 
-o<frame_rect> call [-2.854][+1.417] [-1.870][-1.417] [#<zt>][#<zb>]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<frame_rect> call [0] [-2.854][+1.417] [-1.870][-1.417]
 
 M2 ; end program

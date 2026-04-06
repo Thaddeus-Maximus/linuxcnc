@@ -1,0 +1,84 @@
+; frame_circ - cuts along the perimeter of a circle (inside or outside).
+; Lead-in arc capped at min(tool_radius, 15% of diameter, available_clearance).
+; Requires globals: #<_z_top>, #<_z_bot>
+; Requires tool loaded (uses #5410 for diameter)
+; Optional global:  #<_z_clearance>
+o<frame_circ> sub
+	; o<frame_circ> call [mode] [x][y] [diameter] [fincut]
+	; #1=mode #2=x #3=y #4=diameter #5=fincut
+
+	#<M_CONVENTIONAL> = [FIX[#1/1] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#1/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#1/1] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#1/8] MOD 2 EQ 0]
+
+	G90
+	G90.1
+	M101
+	G17
+
+	#<td> = #5410
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #<_z_top>
+	o1 endif
+
+	; lead-in arc radius: capped at tool radius, 15% of pocket diameter,
+	; and available clearance between tool and pocket wall
+	#<r_entry> = #<tr>
+	o10 if [#<r_entry> GT [#4*0.15]]
+		#<r_entry> = [#4*0.15]
+	o10 endif
+	; for inside cuts, also cap to available radial clearance
+	o11 if [#<M_INSIDE>]
+		#<avail> = [[#4/2 - #<tr>] * 0.4]
+		o12 if [#<avail> LT #<r_entry>]
+			#<r_entry> = #<avail>
+		o12 endif
+	o11 endif
+	o13 if [#<r_entry> LT 0.001]
+		#<r_entry> = 0.001
+	o13 endif
+
+	G0 Z#<z_clearance>
+
+	o20     if [#<M_INSIDE> AND #<M_CONVENTIONAL>]
+		G0 X[#2-#<r_entry>] Y[#3 + #4/2 - #<tr> - #<r_entry>]
+		G0 Z#<_z_top>
+		G1 Z#<_z_bot>
+		G2 X#2 Y[#3 + #4/2 - #<tr>] I#2 J[#3 + #4/2 - #<tr> - #<r_entry>]
+		G2 X#2 Y[#3 + #4/2 - #<tr>] I#2 J#3
+		G2 X[#2+#<r_entry>] Y[#3 + #4/2 - #<tr> - #<r_entry>] I#2 J[#3 + #4/2 - #<tr> - #<r_entry>]
+
+	o20 elseif [#<M_INSIDE> AND #<M_CLIMB>]
+		G0 X[#2+#<r_entry>] Y[#3 + #4/2 - #<tr> - #<r_entry>]
+		G0 Z#<_z_top>
+		G1 Z#<_z_bot>
+		G3 X#2 Y[#3 + #4/2 - #<tr>] I#2 J[#3 + #4/2 - #<tr> - #<r_entry>]
+		G3 X#2 Y[#3 + #4/2 - #<tr>] I#2 J#3
+		G3 X[#2-#<r_entry>] Y[#3 + #4/2 - #<tr> - #<r_entry>] I#2 J[#3 + #4/2 - #<tr> - #<r_entry>]
+
+	o20 elseif [#<M_OUTSIDE> AND #<M_CONVENTIONAL>]
+		G0 X[#2+#<r_entry>] Y[#3 + #4/2 + #<tr> + #<r_entry>]
+		G0 Z#<_z_top>
+		G1 Z#<_z_bot>
+		G2 X#2 Y[#3 + #4/2 + #<tr>] I#2 J[#3 + #4/2 + #<tr> + #<r_entry>]
+		G3 X#2 Y[#3 + #4/2 + #<tr>] I#2 J#3
+		G2 X[#2-#<r_entry>] Y[#3 + #4/2 + #<tr>+ #<r_entry>] I#2 J[#3 + #4/2 + #<tr> + #<r_entry>]
+
+	o20 elseif [#<M_OUTSIDE> AND #<M_CLIMB>]
+		G0 X[#2-#<r_entry>] Y[#3 + #4/2 + #<tr> + #<r_entry>]
+		G0 Z#<_z_top>
+		G1 Z#<_z_bot>
+		G3 X#2 Y[#3 + #4/2 + #<tr>] I#2 J[#3 + #4/2 + #<tr> + #<r_entry>]
+		G2 X#2 Y[#3 + #4/2 + #<tr>] I#2 J#3
+		G3 X[#2+#<r_entry>] Y[#3 + #4/2 + #<tr>+ #<r_entry>] I#2 J[#3 + #4/2 + #<tr> + #<r_entry>]
+	o20 endif
+
+	G0 Z#<z_clearance>
+
+o<frame_circ> endsub
+
+M2

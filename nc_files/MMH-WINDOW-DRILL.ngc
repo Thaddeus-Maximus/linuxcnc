@@ -4,8 +4,10 @@
 M03 ; Start spindle
 F10 ; Feed
 
-o<drill> call [3.25][-0.5] [0.05][-0.35] [0.2]
-o<drill> call [11.875][-0.5] [0.05][-0.35] [0.2]
+#<_z_top> = 0.05
+#<_z_bot> = -0.35
+o<drill> call [3.25][-0.5] [0.2]
+o<drill> call [11.875][-0.5] [0.2]
 
 M05 ; Stop Spindle
 M30 ; End Program

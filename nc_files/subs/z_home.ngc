@@ -1,0 +1,8 @@
+; z_home - rapid Z to machine zero (quill fully up).
+; Uses G53 to bypass all offsets (work, tool, G92).
+; Safe to call any time. No arguments.
+o<z_home> sub
+	G53 G0 Z0
+o<z_home> endsub
+
+M2

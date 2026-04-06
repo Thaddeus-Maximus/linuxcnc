@@ -23,7 +23,7 @@ o<end_cope> sub
 	#<M_INSIDE>       = [FIX[#8/8] MOD 2 EQ 0]
 
 
-	#<td> = #<_td>
+	#<td> = #5410
 	#<tr> = [#<td>/2]
 	o1 if [EXISTS[#<_z_clearance>]]
 		#<z_clearance> = #<_z_clearance>

@@ -17,9 +17,17 @@ F15  ; inch or mm/min (300 mm/min = about 1 ft/min)
 #<zt> = +0.05
 #<zb> = -0.3
 
-o<drill> call [0.375][-0.375] [#<zt>][#<zb>]
-o<drill> call [0.375+132/25.4][-0.375] [#<zt>][#<zb>]
-o<pocket_circ> call [0.375+132/25.4+28/25.4][-0.375] [0.28] [#<zt>][#<zb>]
-o<pocket_circ> call [0.375+132/25.4+28/25.4+2.75][-0.375] [0.28] [#<zt>][#<zb>]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<drill> call [0.375][-0.375]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<drill> call [0.375+132/25.4][-0.375]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [0.375+132/25.4+28/25.4][-0.375] [0.28]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [0.375+132/25.4+28/25.4+2.75][-0.375] [0.28]
 
 M2 ; end program

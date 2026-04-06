@@ -16,26 +16,51 @@ G54  ; absolute coordinates
 
 #<op> = 2
 
-#<_td> = 0.5
 F12
-	o<pocket_circ> call [-3.5][-.5] [2] [0.1][-0.4] [0.0]
-	o<pocket_circ> call [-1.875][-.5] [0.52] [0.1][-0.4] [0.0]
-	o<pocket_circ> call [-5.125][-.5] [0.52] [0.1][-0.4] [0.0]
+	#<_z_top> = 0.1
+	#<_z_bot> = -0.4
+	o<pocket_circ> call [0] [-3.5][-.5] [2] [0.0]
+	#<_z_top> = 0.1
+	#<_z_bot> = -0.4
+	o<pocket_circ> call [0] [-1.875][-.5] [0.52] [0.0]
+	#<_z_top> = 0.1
+	#<_z_bot> = -0.4
+	o<pocket_circ> call [0] [-5.125][-.5] [0.52] [0.0]
 
 	
 F8
 
 ;o10 if [#<op> EQ 1]
-o<drill> call [-.5][-.5] [0.1][-0.3]
-;o<drill> call [-1.875][-.5] [0.1][-0.3]
-;o<drill> call [-3.500][-.5] [0.1][-0.3]
-;o<drill> call [-5.125][-.5] [0.1][-0.3]
-o<drill> call [-7.750][-.5] [0.1][-0.3]
-o<drill> call [-8.500][-.5] [0.1][-0.3]
-o<drill> call [-9.250][-.5] [0.1][-0.3]
-o<drill> call [-10.00][-.5] [0.1][-0.3]
-o<drill> call [-10.75][-.5] [0.1][-0.3]
-o<drill> call [-11.50][-.5] [0.1][-0.3]
+#<_z_top> = 0.1
+#<_z_bot> = -0.3
+o<drill> call [-.5][-.5]
+;#<_z_top> = 0.1
+;#<_z_bot> = -0.3
+;o<drill> call [-1.875][-.5]
+;#<_z_top> = 0.1
+;#<_z_bot> = -0.3
+;o<drill> call [-3.500][-.5]
+;#<_z_top> = 0.1
+;#<_z_bot> = -0.3
+;o<drill> call [-5.125][-.5]
+#<_z_top> = 0.1
+#<_z_bot> = -0.3
+o<drill> call [-7.750][-.5]
+#<_z_top> = 0.1
+#<_z_bot> = -0.3
+o<drill> call [-8.500][-.5]
+#<_z_top> = 0.1
+#<_z_bot> = -0.3
+o<drill> call [-9.250][-.5]
+#<_z_top> = 0.1
+#<_z_bot> = -0.3
+o<drill> call [-10.00][-.5]
+#<_z_top> = 0.1
+#<_z_bot> = -0.3
+o<drill> call [-10.75][-.5]
+#<_z_top> = 0.1
+#<_z_bot> = -0.3
+o<drill> call [-11.50][-.5]
 ;o10 elseif [#<op> EQ 2]
 	
 ;o10 endif

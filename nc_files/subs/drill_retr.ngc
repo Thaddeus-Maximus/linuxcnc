@@ -1,0 +1,26 @@
+; drill_retr - semi-manual drill: retracts Z, disables Z for manual plunge,
+; then re-enables and retracts on resume.
+; Optional global: #<_z_clearance> (else falls back to #<_z_top>)
+o<drill_retr> sub
+	; x, y
+	; #1 #2
+
+	G90   ; absolute x,y,z
+
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #<_z_top>
+	o1 endif
+
+	M101
+	G0 Z#<z_clearance>
+	G0 X#1 Y#2
+	M102           ; disable Z so operator can plunge manually
+	M0             ; pause
+	M101           ; re-enable Z
+	G0 Z#<z_clearance>
+
+o<drill_retr> endsub
+
+M2

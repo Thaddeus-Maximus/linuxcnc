@@ -3,7 +3,6 @@ G54  ; absolute coordinates
 
 #<_z_clearance> = 6
 #<_rampang>     = 20
-#<_td> = 6.35
 
 ; mode refernce
 ; +1: Conventional milling
@@ -13,9 +12,15 @@ G54  ; absolute coordinates
 
 F150  ; inch or mm/min (300 mm/min = about 1 ft/min)
 
-o<pocket_circ> call [-20][-10.0] [8.2] [2][-9]
-o<pocket_circ> call [-20][-40.6] [8.2] [2][-9]
-o<pocket_circ> call [+30][-25.3] [8.2] [2][-9]
+#<_z_top> = 2
+#<_z_bot> = -9
+o<pocket_circ> call [0] [-20][-10.0] [8.2]
+#<_z_top> = 2
+#<_z_bot> = -9
+o<pocket_circ> call [0] [-20][-40.6] [8.2]
+#<_z_top> = 2
+#<_z_bot> = -9
+o<pocket_circ> call [0] [+30][-25.3] [8.2]
 
 o<end_round> call [0][+30][-25.3] [26] [2][-9] [0.5]
 

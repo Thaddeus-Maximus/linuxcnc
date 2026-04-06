@@ -3,16 +3,17 @@
 ;M03 ; start spindle
 F7 ; feedrate
 
-;#<_td> = 0.5
 ;M6 T1 ; tool 1: 1/2" endmill
 ;G43
 M03
 G4 P1 ; wait 2 sec (spindle start)
 
-o<drill> call  [0.30] [0] [0.05] [ -1.15] [0.18]
-o<drill>  call [1.00] [0] [0.05] [ -1.15] [0.18]
-o<drill> call [13.75] [0] [0.05] [ -1.15] [0.18]
-o<drill> call [14.45] [0] [0.05] [ -1.15] [0.18]
+#<_z_top> = 0.05
+#<_z_bot> =  -1.15
+o<drill> call  [0.30] [0] [0.18]
+o<drill>  call [1.00] [0] [0.18]
+o<drill> call [13.75] [0] [0.18]
+o<drill> call [14.45] [0] [0.18]
 
 M05 ; stop spindle
 G0 X0.3

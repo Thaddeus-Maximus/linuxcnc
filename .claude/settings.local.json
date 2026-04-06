@@ -5,7 +5,15 @@
       "Bash(where pdftotext:*)",
       "Bash(where python:*)",
       "Bash(where python3:*)",
-      "Bash(where py:*)"
+      "Bash(where py:*)",
+      "Bash(xargs grep:*)",
+      "WebFetch(domain:linuxcnc.org)",
+      "WebSearch",
+      "WebFetch(domain:www.linuxcnc.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:forum.linuxcnc.org)",
+      "WebFetch(domain:www.forum.linuxcnc.org)"
     ]
   }
 }

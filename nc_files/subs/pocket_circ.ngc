@@ -1,0 +1,139 @@
+; pocket_circ - circular pocket cut with an outward spiral from center.
+; Requires globals: #<_z_top>, #<_z_bot>
+; Requires tool loaded (uses #5410 for diameter)
+; Optional globals: #<_z_clearance>, #<_rampang>, #<_stepover>
+o<pocket_circ> sub
+	; o<pocket_circ> call [mode] [x][y] [diameter] [fincut]
+	; #1=mode #2=x #3=y #4=diameter #5=fincut
+
+	#<M_CONVENTIONAL> = [FIX[#1/1] MOD 2 EQ 1]
+	#<M_PLUNGE>       = [FIX[#1/4] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#1/1] MOD 2 EQ 0]
+	#<M_HELIX>        = [FIX[#1/4] MOD 2 EQ 0]
+
+	G90
+	G90.1
+	M101
+	G17
+
+	#<td> = #5410
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #<_z_top>
+	o1 endif
+	o2 if [EXISTS[#<_rampang>]]
+		#<rampang> = #<_rampang>
+	o2 else
+		#<rampang> = 5
+	o2 endif
+	o3 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o3 else
+		#<stepover> = [#<td>*0.4]
+	o3 endif
+
+	o4 if [#<td> GT #4]
+		o5 return  ; tool bigger than pocket
+	o4 endif
+
+	#<a> = 0
+	#<r> = 0
+	o100 if [#<M_HELIX>]
+		#<r> = [#<td>*0.3]
+		o115 if [[[#4-#<td>]/2-ABS[#5]] LE #<r>]
+			#<r> = [[[#4-#<td>]/2-ABS[#5]]*0.8]
+		o115 endif
+
+		#<z_step> = [#<r>*2*3.14*TAN[#<rampang>]]
+		; guard: if z_step is tiny, avoid infinite loop
+		o116 if [#<z_step> LT 0.0001]
+			#<z_step> = 0.0001
+		o116 endif
+
+		G0 Z#<z_clearance>
+		G0 X[#2+#<r>] Y[#3]
+		G0 Z#<_z_top>
+
+		#<z> = [#<_z_top>-#<z_step>]
+		o101 while [#<z> GT #<_z_bot>]
+			o102 if [#<M_CLIMB>]
+				G3 X[#2+#<r>] Y[#3] I[#2] J[#3] Z[#<z>] P1
+			o102 else
+				G2 X[#2+#<r>] Y[#3] I[#2] J[#3] Z[#<z>] P1
+			o102 endif
+			#<z> = [#<z> - #<z_step>]
+		o101 endwhile
+
+		; finish plunge to exact depth
+		; guard: avoid division by zero if z_top == z_bot
+		o117 if [ABS[#<_z_top>-#<_z_bot>] GT 0.0001]
+			#<a> = [[#<z>-#<_z_bot>]/[#<_z_top>-#<_z_bot>]*360]
+		o117 else
+			#<a> = 0
+		o117 endif
+		o103 if [#<M_CLIMB>]
+			G3 X[#2+COS[#<a>]*#<r>] Y[#3+SIN[#<a>]*#<r>] I[#2] J[#3] Z[#<_z_bot>]
+			G3 X[#2+COS[#<a>]*#<r>] Y[#3+SIN[#<a>]*#<r>] I[#2] J[#3] Z[#<_z_bot>]
+		o103 else
+			G2 X[#2+COS[#<a>]*#<r>] Y[#3-SIN[#<a>]*#<r>] I[#2] J[#3] Z[#<_z_bot>]
+			G2 X[#2+COS[#<a>]*#<r>] Y[#3-SIN[#<a>]*#<r>] I[#2] J[#3] Z[#<_z_bot>]
+		o103 endif
+
+	o100 elseif [#<M_PLUNGE>]
+		G0 Z#<z_clearance>
+		G0 X[#2] Y[#3]
+		G0 Z[#<_z_top>]
+		G1 Z[#<_z_bot>]
+	o100 endif
+
+	; spiral outward
+	#<r_base> = #<r>
+	#<a_base> = #<a>
+	#<iter> = 0
+	o105 while [#<r> LT [[#4-#<td>]/2-ABS[#5]]]
+		o106 if [#<M_CLIMB>]
+			G1 X[#2+COS[#<a>]*#<r>] Y[#3+SIN[#<a>]*#<r>]
+		o106 else
+			G1 X[#2+COS[#<a>]*#<r>] Y[#3-SIN[#<a>]*#<r>]
+		o106 endif
+		#<a> = [#<a>+1]
+		#<r> = [#<r_base>+[#<a>-#<a_base>]/360*#<stepover>]
+		#<iter> = [#<iter>+1]
+		o109 if [#<iter> GT 360000]
+			o105 BREAK  ; safety limit
+		o109 endif
+	o105 endwhile
+
+	; pre-finish circle
+	#<r> = [[#4-#<td>]/2-ABS[#5]]
+	o107 if [#<M_CLIMB>]
+		G1 X[#2+COS[#<a>]*#<r>] Y[#3+SIN[#<a>]*#<r>]
+		G3 X[#2+COS[#<a>]*#<r>] Y[#3+SIN[#<a>]*#<r>] I[#2] J[#3]
+	o107 else
+		G1 X[#2+COS[#<a>]*#<r>] Y[#3-SIN[#<a>]*#<r>]
+		G2 X[#2+COS[#<a>]*#<r>] Y[#3-SIN[#<a>]*#<r>] I[#2] J[#3]
+	o107 endif
+
+	; finish cut
+	o104 if [ABS[#5] GT 0.0]
+		#<r> = [[#4-#<td>]/2]
+		o108 if [#<M_CLIMB>]
+			G1 X[#2+COS[#<a>]*#<r>] Y[#3+SIN[#<a>]*#<r>]
+			G3 X[#2+COS[#<a>]*#<r>] Y[#3+SIN[#<a>]*#<r>] I[#2] J[#3]
+			#<r> = [[#4-#<td>]/2*0.9]
+			G1 X[#2+COS[#<a>]*#<r>] Y[#3+SIN[#<a>]*#<r>]
+		o108 else
+			G1 X[#2+COS[#<a>]*#<r>] Y[#3-SIN[#<a>]*#<r>]
+			G2 X[#2+COS[#<a>]*#<r>] Y[#3-SIN[#<a>]*#<r>] I[#2] J[#3]
+			#<r> = [[#4-#<td>]/2*0.9]
+			G1 X[#2+COS[#<a>]*#<r>] Y[#3-SIN[#<a>]*#<r>]
+		o108 endif
+	o104 endif
+
+	G0 Z#<z_clearance>
+
+o<pocket_circ> endsub
+
+M2

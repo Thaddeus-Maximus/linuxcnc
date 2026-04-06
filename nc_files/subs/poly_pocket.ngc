@@ -1,0 +1,82 @@
+; poly_pocket - filled polygon pocket, concentric outward from center.
+; apothem = flat-to-flat distance / 2 (center to midpoint of edge).
+; rotation in degrees: 0 places first vertex on +X axis, CCW positive.
+; Requires globals: #<_z_top>, #<_z_bot>
+; Requires tool loaded (uses #5410 for diameter)
+; Optional globals: #<_z_clearance>, #<_stepover>
+o<poly_pocket> sub
+	; o<poly_pocket> call [mode] [x][y] [n_sides] [apothem] [rotation] [fincut]
+	; #1=mode #2=x #3=y #4=n_sides #5=apothem #6=rotation #7=fincut
+
+	#<M_CONVENTIONAL> = [FIX[#1/1] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#1/1] MOD 2 EQ 0]
+
+	G90
+	G90.1
+	M101
+	G17
+
+	#<td> = #5410
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #<_z_top>
+	o1 endif
+	o2 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o2 else
+		#<stepover> = [#<td>*0.4]
+	o2 endif
+
+	#<fincut> = #7
+	o13 if [#<fincut> LT 0]
+		#<fincut> = [0 - #<fincut>]
+	o13 endif
+
+	#<max_apothem> = [#5 - #<tr> - #<fincut>]
+	#<step_angle> = [360/#4]
+
+	o14 if [#<max_apothem> LE 0]
+		o15 return
+	o14 endif
+
+	o16 if [#<M_CLIMB>]
+		#<dir> = 1
+	o16 else
+		#<dir> = -1
+	o16 endif
+
+	G0 Z#<z_clearance>
+	G0 X#2 Y#3
+	G0 Z#<_z_top>
+	G1 Z#<_z_bot>
+
+	#<current_apothem> = #<stepover>
+	o30 while [#<current_apothem> LT #<max_apothem>]
+		#<R> = [#<current_apothem> / COS[180/#4]]
+		G1 X[#2 + #<R>*COS[#6]] Y[#3 + #<R>*SIN[#6]]
+		#<i> = 1
+		o31 while [#<i> LE #4]
+			#<ang> = [#6 + #<dir>*#<i>*#<step_angle>]
+			G1 X[#2 + #<R>*COS[#<ang>]] Y[#3 + #<R>*SIN[#<ang>]]
+			#<i> = [#<i> + 1]
+		o31 endwhile
+		#<current_apothem> = [#<current_apothem> + #<stepover>]
+	o30 endwhile
+
+	; final pass at max_apothem
+	#<R> = [#<max_apothem> / COS[180/#4]]
+	G1 X[#2 + #<R>*COS[#6]] Y[#3 + #<R>*SIN[#6]]
+	#<i> = 1
+	o40 while [#<i> LE #4]
+		#<ang> = [#6 + #<dir>*#<i>*#<step_angle>]
+		G1 X[#2 + #<R>*COS[#<ang>]] Y[#3 + #<R>*SIN[#<ang>]]
+		#<i> = [#<i> + 1]
+	o40 endwhile
+
+	G0 Z#<z_clearance>
+
+o<poly_pocket> endsub
+
+M2

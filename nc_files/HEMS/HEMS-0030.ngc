@@ -15,8 +15,12 @@ M06  ; manual toolchange
 G54  ; absolute coordinates
 F13  ; mm/min (300 mm/min = about 1 ft/min)
 
-;o<pocket_circ> call [0][0] [2.05] [.1][-.5] [.01] [0+4]
-o<frame_circ> call [0][0] [2.055] [.1][-.5] [0] [0]
+;#<_z_top> = .1
+;#<_z_bot> = -.5
+;o<pocket_circ> call [0+4] [0][0] [2.05] [.01]
+#<_z_top> = .1
+#<_z_bot> = -.5
+o<frame_circ> call [0] [0][0] [2.055] [0]
 
 
 

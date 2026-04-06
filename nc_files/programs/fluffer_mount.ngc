@@ -3,7 +3,6 @@ G54  ; absolute coordinates
 
 #<_z_clearance> = 0.5
 #<_rampang>     = 20
-#<_td> = [1/4]
 
 ; mode refernce
 ; +1: Conventional milling

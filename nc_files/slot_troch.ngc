@@ -16,7 +16,7 @@ o<slot_troch> sub
 	M101  ; enable Z-axis (M102 disables)
 	G17   ; select XY plane for arcs
 
-	#<td> = #<_td>
+	#<td> = #5410
 	#<tr> = [#<td>/2]
 	o1 if [EXISTS[#<_z_clearance>]]
 		#<z_clearance> = #<_z_clearance>
@@ -30,7 +30,7 @@ o<slot_troch> sub
 	o3 endif
 
 	#<a> = [ATAN[#4-#2]/[#3-#1]]
-	#<r> = [[#5-#<_td>]/2]
+	#<r> = [[#5-#5410]/2]
 
 
 
@@ -57,7 +57,7 @@ o<slot_troch> sub
 
 	o100 if [#<M_CLIMB>]
 
-		#<r> = [[#5-#<_td>]/2-#8]
+		#<r> = [[#5-#5410]/2-#8]
 
 		G1 X[#1+#<l>*COS[#<a>] -[SIN[#<a>]*[#<r>]]] Y[#2+#<l>*SIN[#<a>] +[COS[#<a>]*[#<r>]]]
 		G3 X[#1+#<l>*COS[#<a>] +[SIN[#<a>]*[#<r>]]] Y[#2+#<l>*SIN[#<a>] -[COS[#<a>]*[#<r>]]] I[#1+#<l>*COS[#<a>]] J[#2+#<l>*SIN[#<a>]]
@@ -71,7 +71,7 @@ o<slot_troch> sub
 			#<l> = [#<l>+#<l_step>]
 		o200 endwhile
 		
-		#<r> = [[#5-#<_td>]/2]
+		#<r> = [[#5-#5410]/2]
 
 		G1 X[#3 +[SIN[#<a>]*[#<r>]]] Y[#4 -[COS[#<a>]*[#<r>]]]			; point 1
 		G3 X[#3 -[SIN[#<a>]*[#<r>]]] Y[#4 +[COS[#<a>]*[#<r>]]] I#3 J#4 	; point 2
@@ -80,7 +80,7 @@ o<slot_troch> sub
 		G1 X[#3 +[SIN[#<a>]*[#<r>]]] Y[#4 -[COS[#<a>]*[#<r>]]]			; point 1
 
 	o100 else
-		#<r> = [[#5-#<_td>]/2-#8]
+		#<r> = [[#5-#5410]/2-#8]
 
 		G1 X[#1+#<l>*COS[#<a>] +[SIN[#<a>]*[#<r>]]] Y[#2+#<l>*SIN[#<a>] -[COS[#<a>]*[#<r>]]] 
 		G2 X[#1+#<l>*COS[#<a>] -[SIN[#<a>]*[#<r>]]] Y[#2+#<l>*SIN[#<a>] +[COS[#<a>]*[#<r>]]] I[#1+#<l>*COS[#<a>]] J[#2+#<l>*SIN[#<a>]]
@@ -94,7 +94,7 @@ o<slot_troch> sub
 			#<l> = [#<l>+#<l_step>]
 		o200 endwhile
 		
-		#<r> = [[#5-#<_td>]/2]
+		#<r> = [[#5-#5410]/2]
 
 		G1 X[#3 -[SIN[#<a>]*[#<r>]]] Y[#4 +[COS[#<a>]*[#<r>]]] 			; point 2
 		G2 X[#3 +[SIN[#<a>]*[#<r>]]] Y[#4 -[COS[#<a>]*[#<r>]]] I#3 J#4	; point 1

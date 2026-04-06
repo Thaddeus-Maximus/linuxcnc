@@ -3,7 +3,6 @@
 ;M03 ; start spindle
 F12 ; feedrate
 
-;#<_td> = 0.5
 ;M6 T1 ; tool 1: 1/2" endmill
 ;G43
 M03

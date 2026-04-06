@@ -1,6 +1,5 @@
 #<_z_clearance> = 5
 #<_rampang>     = 10
-#<_td> = [3/16*25.4]
 
 ; mode refernce
 ; +1: Conventional milling
@@ -15,15 +14,29 @@ F150
 #<zt> = 0.2
 #<zb> = -4
 
-o<pocket_circ> call [0][-17] [18.7] [#<zt>][#<zb>]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [0][-17] [18.7]
 
 
-;o<pocket_circ> call [10][ -7] [5.2] [#<zt>][#<zb>]
-;o<pocket_circ> call [10][-27] [5.2] [#<zt>][#<zb>]
-;o<pocket_circ> call [35][-17] [18.7] [#<zt>][#<zb>]
+;#<_z_top> = #<zt>
+;#<_z_bot> = #<zb>
+;o<pocket_circ> call [0] [10][ -7] [5.2]
+;#<_z_top> = #<zt>
+;#<_z_bot> = #<zb>
+;o<pocket_circ> call [0] [10][-27] [5.2]
+;#<_z_top> = #<zt>
+;#<_z_bot> = #<zb>
+;o<pocket_circ> call [0] [35][-17] [18.7]
 
-;o<pocket_circ> call [54+10][ -7] [5.2] [#<zt>][#<zb>]
-;o<pocket_circ> call [54+10][-27] [5.2] [#<zt>][#<zb>]
-;o<pocket_circ> call [54+35][-17] [18.7] [#<zt>][#<zb>]
+;#<_z_top> = #<zt>
+;#<_z_bot> = #<zb>
+;o<pocket_circ> call [0] [54+10][ -7] [5.2]
+;#<_z_top> = #<zt>
+;#<_z_bot> = #<zb>
+;o<pocket_circ> call [0] [54+10][-27] [5.2]
+;#<_z_top> = #<zt>
+;#<_z_bot> = #<zb>
+;o<pocket_circ> call [0] [54+35][-17] [18.7]
 
 M2 ; end program

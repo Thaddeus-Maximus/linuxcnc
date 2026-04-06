@@ -1,0 +1,171 @@
+; pocket_rect - rectangular pocket, zigzag along the long axis.
+; Requires globals: #<_z_top>, #<_z_bot>
+; Requires tool loaded (uses #5410 for diameter)
+; Optional globals: #<_z_clearance>, #<_stepover>, #<_rampang>
+o<pocket_rect> sub
+	; o<pocket_rect> call [mode] [x1][y1] [x2][y2] [fincut]
+	; #1=mode #2=x1 #3=y1 #4=x2 #5=y2 #6=fincut
+
+	#<M_PLUNGE> = [FIX[#1/4] MOD 2 EQ 1]
+	#<M_HELIX>  = [FIX[#1/4] MOD 2 EQ 0]
+
+	G90
+	G90.1
+	M101
+	G17
+
+	#<td> = #5410
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #<_z_top>
+	o1 endif
+	o2 if [EXISTS[#<_stepover>]]
+		#<stepover> = #<_stepover>
+	o2 else
+		#<stepover> = [#<td>*0.4]
+	o2 endif
+	o3 if [EXISTS[#<_rampang>]]
+		#<rampang> = #<_rampang>
+	o3 else
+		#<rampang> = 5
+	o3 endif
+
+	; sort coords
+	#<minx> = #2
+	#<maxx> = #4
+	o11 if [#4 LT #2]
+		#<minx> = #4
+		#<maxx> = #2
+	o11 endif
+	#<miny> = #3
+	#<maxy> = #5
+	o12 if [#5 LT #3]
+		#<miny> = #5
+		#<maxy> = #3
+	o12 endif
+
+	#<fincut> = #6
+	o13 if [#<fincut> LT 0]
+		#<fincut> = [0 - #<fincut>]
+	o13 endif
+
+	#<tx_min> = [#<minx> + #<tr> + #<fincut>]
+	#<tx_max> = [#<maxx> - #<tr> - #<fincut>]
+	#<ty_min> = [#<miny> + #<tr> + #<fincut>]
+	#<ty_max> = [#<maxy> - #<tr> - #<fincut>]
+
+	#<xrange> = [#<tx_max> - #<tx_min>]
+	#<yrange> = [#<ty_max> - #<ty_min>]
+
+	o14 if [[#<xrange> LE 0] OR [#<yrange> LE 0]]
+		o15 return
+	o14 endif
+
+	G0 Z#<z_clearance>
+
+	o20 if [#<xrange> GE #<yrange>]
+		G0 X#<tx_min> Y#<ty_min>
+		G0 Z#<_z_top>
+		o21 if [#<M_HELIX>]
+			#<r> = [#<td>*0.3]
+			o22 if [[2*#<r>] GT #<xrange>]
+				#<r> = [#<xrange>/2 - 0.001]
+			o22 endif
+			#<z_step> = [#<r>*2*3.14*TAN[#<rampang>]]
+			o25 if [#<z_step> LT 0.0001]
+				#<z_step> = 0.0001
+			o25 endif
+			G0 X[#<tx_min>+2*#<r>] Y#<ty_min>
+			#<z> = [#<_z_top>-#<z_step>]
+			o23 while [#<z> GT #<_z_bot>]
+				G3 X[#<tx_min>+2*#<r>] Y#<ty_min> I[-#<r>] J0 Z#<z>
+				#<z> = [#<z> - #<z_step>]
+			o23 endwhile
+			G3 X[#<tx_min>+2*#<r>] Y#<ty_min> I[-#<r>] J0 Z#<_z_bot>
+			G1 X#<tx_min>
+		o21 else
+			G1 Z#<_z_bot>
+		o21 endif
+
+		#<y> = #<ty_min>
+		#<xa> = #<tx_min>
+		#<xb> = #<tx_max>
+		o30 while [1]
+			G1 X#<xb> Y#<y>
+			#<ynext> = [#<y> + #<stepover>]
+			o31 if [#<ynext> GE #<ty_max>]
+				#<ynext> = #<ty_max>
+				G1 Y#<ynext>
+				#<tmp> = #<xa>
+				#<xa> = #<xb>
+				#<xb> = #<tmp>
+				G1 X#<xb>
+				o30 BREAK
+			o31 endif
+			G1 Y#<ynext>
+			#<y> = #<ynext>
+			#<tmp> = #<xa>
+			#<xa> = #<xb>
+			#<xb> = #<tmp>
+		o30 endwhile
+
+	o20 else
+		G0 X#<tx_min> Y#<ty_min>
+		G0 Z#<_z_top>
+		o41 if [#<M_HELIX>]
+			#<r> = [#<td>*0.3]
+			o42 if [[2*#<r>] GT #<yrange>]
+				#<r> = [#<yrange>/2 - 0.001]
+			o42 endif
+			#<z_step> = [#<r>*2*3.14*TAN[#<rampang>]]
+			o45 if [#<z_step> LT 0.0001]
+				#<z_step> = 0.0001
+			o45 endif
+			G0 X#<tx_min> Y[#<ty_min>+2*#<r>]
+			#<z> = [#<_z_top>-#<z_step>]
+			o43 while [#<z> GT #<_z_bot>]
+				G3 X#<tx_min> Y[#<ty_min>+2*#<r>] I0 J[-#<r>] Z#<z>
+				#<z> = [#<z> - #<z_step>]
+			o43 endwhile
+			G3 X#<tx_min> Y[#<ty_min>+2*#<r>] I0 J[-#<r>] Z#<_z_bot>
+			G1 Y#<ty_min>
+		o41 else
+			G1 Z#<_z_bot>
+		o41 endif
+
+		#<x> = #<tx_min>
+		#<ya> = #<ty_min>
+		#<yb> = #<ty_max>
+		o50 while [1]
+			G1 Y#<yb> X#<x>
+			#<xnext> = [#<x> + #<stepover>]
+			o51 if [#<xnext> GE #<tx_max>]
+				#<xnext> = #<tx_max>
+				G1 X#<xnext>
+				#<tmp> = #<ya>
+				#<ya> = #<yb>
+				#<yb> = #<tmp>
+				G1 Y#<yb>
+				o50 BREAK
+			o51 endif
+			G1 X#<xnext>
+			#<x> = #<xnext>
+			#<tmp> = #<ya>
+			#<ya> = #<yb>
+			#<yb> = #<tmp>
+		o50 endwhile
+	o20 endif
+
+	G1 X#<tx_min> Y#<ty_min>
+	G1 X#<tx_max> Y#<ty_min>
+	G1 X#<tx_max> Y#<ty_max>
+	G1 X#<tx_min> Y#<ty_max>
+	G1 X#<tx_min> Y#<ty_min>
+
+	G0 Z#<z_clearance>
+
+o<pocket_rect> endsub
+
+M2

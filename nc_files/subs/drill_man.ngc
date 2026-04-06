@@ -1,0 +1,16 @@
+; drill_man - positions XY, disables Z, pauses for manual drilling
+; No globals required (Z is disabled for the whole operation)
+o<drill_man> sub
+	; x, y
+	; #1 #2
+
+	G90   ; absolute x,y,z
+	M102  ; disable Z-axis (M101 enables)
+
+	G0 X#1 Y#2
+
+	M0    ; pause for operator
+
+o<drill_man> endsub
+
+M2

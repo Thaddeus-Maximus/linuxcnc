@@ -19,8 +19,12 @@ G54  ; absolute coordinates
 F20  ; inch or mm/min (300 mm/min = about 1 ft/min)
 
 o10 sub
-o<pocket_circ> call [#1][#2] [.39] [0.05][-0.197]
-o<drill>       call [#1][#2] [-.15][-0.5]
+#<_z_top> = 0.05
+#<_z_bot> = -0.197
+o<pocket_circ> call [0] [#1][#2] [.39]
+#<_z_top> = -.15
+#<_z_bot> = -0.5
+o<drill>       call [#1][#2]
 o10 endsub
 
 o10 call [-22/25.4][-0.394]

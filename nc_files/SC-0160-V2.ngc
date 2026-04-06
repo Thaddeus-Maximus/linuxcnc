@@ -1,17 +1,20 @@
-#<_td> = [3/16]
 #<_z_clearance> = 0.5
 #<rampang> = 30
 
 M03
 F20
-o<frame_circ> call [1.375][-1.875] [1.375] [+0.10][-0.6] [0] [+4]
+#<_z_top> = +0.10
+#<_z_bot> = -0.6
+o<frame_circ> call [+4] [1.375][-1.875] [1.375] [0]
 
 F14
 
 o<peck_and_pocket> sub
 	#<d> = 0.2
-	o<drill> call [#1][#2] [0.1] [-0.6] [0.2] 
-	o<pocket_circ> call [#1] [#2] [#<d>] [0.1] [-0.6] [0] [+4]
+	#<_z_top> = 0.1
+	#<_z_bot> = -0.6
+	o<drill> call [#1][#2] [0.2]
+	o<pocket_circ> call [+4] [#1] [#2] [#<d>] [0]
 o<peck_and_pocket> endsub
 #<d> =0.2
 o<peck_and_pocket> call [5.625][-0.375]

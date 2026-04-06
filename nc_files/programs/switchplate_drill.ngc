@@ -8,17 +8,18 @@ G54  ; fixture #1
 
 F5.0 ; feedrate
 
+#<_z_top> = 0.1
+#<_z_bot> = -0.2
 
+o<drill> call [-2/2] [-3.875/2]
+o<drill> call [+2/2] [-3.875/2]
+o<drill> call [+2/2] [+3.875/2]
+o<drill> call [-2/2] [+3.875/2]
 
-o<drill> call [-2/2] [-3.875/2] [0.1] [-0.2]
-o<drill> call [+2/2] [-3.875/2] [0.1] [-0.2]
-o<drill> call [+2/2] [+3.875/2] [0.1] [-0.2]
-o<drill> call [-2/2] [+3.875/2] [0.1] [-0.2]
-
-o<drill> call [+0.75] [0] [0.1] [-0.2]
-o<drill> call [-0.75] [0] [0.1] [-0.2]
-o<drill> call [0] [-0.75] [0.1] [-0.2]
-o<drill> call [0] [+0.75] [0.1] [-0.2]
+o<drill> call [+0.75] [0]
+o<drill> call [-0.75] [0]
+o<drill> call [0] [-0.75]
+o<drill> call [0] [+0.75]
 
 
 

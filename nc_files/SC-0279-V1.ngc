@@ -1,4 +1,3 @@
-#<_td> = 0.25
 #<_z_clearance> = 0.2
 #<rampang> = 6
 
@@ -10,7 +9,9 @@ F9
 
 G90.1 ; absolute arc centers
 
-o<pocket_circ> call [0][0] [.540] [+.05][-.2]
+#<_z_top> = +.05
+#<_z_bot> = -.2
+o<pocket_circ> call [0] [0][0] [.540]
 
 G0 Z1.0
 
@@ -28,7 +29,9 @@ G2 I[#<x>-#<o>] J0 X[#<x>-.84356-#<o>] Y[+.61679]
 G1 Y[+1.0]
 G0 Z1.0
 
-;o<pocket_circ> call [0][0] [.540] [+0.10][-0.25]
+;#<_z_top> = +0.10
+;#<_z_bot> = -0.25
+;o<pocket_circ> call [0] [0][0] [.540]
 
 
 M05

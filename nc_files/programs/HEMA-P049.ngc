@@ -3,7 +3,6 @@ G54  ; absolute coordinates
 
 #<_z_clearance> = 10
 #<_rampang>     = 20
-#<_td> = [3/16*25.4]
 
 ; mode refernce
 ; +1: Conventional milling
@@ -29,14 +28,30 @@ F150  ; inch or mm/min (300 mm/min = about 1 ft/min)
 
 
 ;#<d> = 12.1
-;o<pocket_circ> call [68][-11] [#<d>] [1][-5]    [.1]
-;o<pocket_circ> call [68][-11] [#<d>] [-4][-10] [.1]
-;o<pocket_circ> call [68][-25] [#<d>] [1][-5] [.1]
-;o<pocket_circ> call [68][-25] [#<d>] [-4][-10] [.1]
-;o<pocket_circ> call [68][-75+11] [#<d>] [1][-5] [.1]
-;o<pocket_circ> call [68][-75+11] [#<d>] [-4][-10] [.1]
-;o<pocket_circ> call [68][-75+25] [#<d>] [1][-5] [.1]
-;o<pocket_circ> call [68][-75+25] [#<d>] [-4][-10] [.1]
+;#<_z_top> = 1
+;#<_z_bot> = -5
+;o<pocket_circ> call [0] [68][-11] [#<d>] [.1]
+;#<_z_top> = -4
+;#<_z_bot> = -10
+;o<pocket_circ> call [0] [68][-11] [#<d>] [.1]
+;#<_z_top> = 1
+;#<_z_bot> = -5
+;o<pocket_circ> call [0] [68][-25] [#<d>] [.1]
+;#<_z_top> = -4
+;#<_z_bot> = -10
+;o<pocket_circ> call [0] [68][-25] [#<d>] [.1]
+;#<_z_top> = 1
+;#<_z_bot> = -5
+;o<pocket_circ> call [0] [68][-75+11] [#<d>] [.1]
+;#<_z_top> = -4
+;#<_z_bot> = -10
+;o<pocket_circ> call [0] [68][-75+11] [#<d>] [.1]
+;#<_z_top> = 1
+;#<_z_bot> = -5
+;o<pocket_circ> call [0] [68][-75+25] [#<d>] [.1]
+;#<_z_top> = -4
+;#<_z_bot> = -10
+;o<pocket_circ> call [0] [68][-75+25] [#<d>] [.1]
 
 o<drill_man> call [5][-5]
 o<drill_man> call [5][-15]

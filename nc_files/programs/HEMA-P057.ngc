@@ -3,7 +3,6 @@ G54  ; absolute coordinates
 
 #<_z_clearance> = 6
 #<_rampang>     = 20
-#<_td> = [9/16*25.4]
 
 ; mode refernce
 ; +1: Conventional milling
@@ -19,20 +18,34 @@ F250  ; inch or mm/min (300 mm/min = about 1 ft/min)
 #<y> = -12.5
 #<d> = 14.0
 
-;o<frame_circ> call [0][0] [13.0] [+1][-5]  [0] [+4+8]
-;o<frame_circ> call [0][0] [13.0] [-4][-10] [0] [+4+8]
-o<frame_circ> call [0][0] [15.0] [+1][-14] [0] [+4+8]
-o<frame_circ> call [0][0] [11.5] [+1][-14] [0] [+4+8]
-o<frame_circ> call [0][0] [7.95] [+1][-14] [0] [+4+8]
+;#<_z_top> = +1
+;#<_z_bot> = -5
+;o<frame_circ> call [+4+8] [0][0] [13.0] [0]
+;#<_z_top> = -4
+;#<_z_bot> = -10
+;o<frame_circ> call [+4+8] [0][0] [13.0] [0]
+#<_z_top> = +1
+#<_z_bot> = -14
+o<frame_circ> call [+4+8] [0][0] [15.0] [0]
+#<_z_top> = +1
+#<_z_bot> = -14
+o<frame_circ> call [+4+8] [0][0] [11.5] [0]
+#<_z_top> = +1
+#<_z_bot> = -14
+o<frame_circ> call [+4+8] [0][0] [7.95] [0]
 
-;o<frame_circ> call [0][0] [17] [-13][-18] [3] [+4+8]
-o<frame_circ> call [0][0] [17] [-13][-23] [3] [+4+8]
+;#<_z_top> = -13
+;#<_z_bot> = -18
+;o<frame_circ> call [+4+8] [0][0] [17] [3]
+#<_z_top> = -13
+#<_z_bot> = -23
+o<frame_circ> call [+4+8] [0][0] [17] [3]
 ;M02
 
 #<w> = 13
 #<n> = 6
 
-#<r> = [[#<w>+#<_td>]/2/COS[360/2/#<n>]]
+#<r> = [[#<w>+#5410]/2/COS[360/2/#<n>]]
 
 G0 Z#<_z_clearance>
 G0 X#<r> Y0

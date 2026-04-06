@@ -15,6 +15,8 @@ M06  ; manual toolchange
 G54  ; absolute coordinates
 F10  ; 10 ft/min
 
-o<frame_circ> call [2.5][-1.0] [1.381] [0.01][-0.3]
+#<_z_top> = 0.01
+#<_z_bot> = -0.3
+o<frame_circ> call [0] [2.5][-1.0] [1.381]
 
 M2 ; end program

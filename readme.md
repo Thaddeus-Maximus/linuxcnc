@@ -1,24 +1,26 @@
+# Lagun Mill - LinuxCNC
 
+## Docs
 
-# TODO
-- [ ] understand offsets better
-- [ ] understand toolchange better
-- [ ] pendant buttons
+- [nc_files/MACROS.md](nc_files/MACROS.md) — macro subroutine reference (drill, pocket, frame, slot, bore, polygon)
+- [nc_files/OFFSETS.md](nc_files/OFFSETS.md) — quick reference for work offsets, tool offsets, cutter comp
+- [nc_files/TOOLS.md](nc_files/TOOLS.md) — deep-dive on tool changes, G10, G41/G42, GMOCCAPY interface
+- [configs/lagun_gmoccapy/README.md](configs/lagun_gmoccapy/README.md) — machine config, wiring, HAL, pendant mapping
+
+## Hardware TODO
+- [ ] pendant buttons (wire ESTOP/START/STOP on GPIO 029/030/031)
 - [ ] holders for wrenches etc
 - [ ] permanent good fix for z axis bracket
 
-# CAM options?
-https://www.scorchworks.com/Fengrave/fengrave.html
-https://www.estlcam.de/
-https://www.grzsoftware.com/
+## Software TODO
+- [x] Use `#5410` (tool diameter from table) instead of `#<_td>` global
+- [x] Reorder macro args to put mode argument first
+- [x] Fix macro bugs (iteration limits, division guards, frame_circ lead-in clamp)
+- [x] `o<z_home>` macro: rapids to machine Z=0 via `G53 G0 Z0`
+- [NOT HAPPENNING] Set up auto tool measurement (tool setter probe + M6 remap)
+- [NOT HAPPENNING] Auto-start LinuxCNC on boot (dwm + startx — see [config README](configs/lagun_gmoccapy/README.md#auto-start-setup))
 
-# CLAUDE todos
-1. check out the macros in nc_files
-	A. Read and understand them
-	B. Generate a better MACROS.md
-	C. Comment the code (do not change/fix anything, just add terse comments, especially at the beginning of macros)
-	D. Search for bugs in the macros and add them to this document
-2. document and understand the lagun_gmoccapy config (this is the only active/relevant config)
-	A. Read and understand it
-	B. Generate better comments (do not change anything functionally, just add comments)
-	C. Generate a README.md
+## CAM options
+- https://www.scorchworks.com/Fengrave/fengrave.html
+- https://www.estlcam.de/
+- https://www.grzsoftware.com/

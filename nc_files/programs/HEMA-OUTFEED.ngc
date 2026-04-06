@@ -1,6 +1,5 @@
 #<_z_clearance> = .5
 #<_rampang>     = 10
-#<_td> = 0.25
 
 ; mode refernce
 ; +1: Conventional milling
@@ -18,14 +17,26 @@ F10
 
 ;o<end_round> call [180] [-5.513][-.50] [0.52] [#<zt>][#<zb>]
 
-o<pocket_circ> call [-5.513][-.50] [0.51] [#<zt>][#<zb>]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [-5.513][-.50] [0.51]
 
-o<pocket_circ> call [-2.028][-.315] [.323] [#<zt>][#<zb>]
-o<pocket_circ> call [-0.494][-.669] [.323] [#<zt>][#<zb>]
-o<pocket_circ> call [+0.494][-.669] [.323] [#<zt>][#<zb>]
-o<pocket_circ> call [+2.028][-.315] [.323] [#<zt>][#<zb>]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [-2.028][-.315] [.323]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [-0.494][-.669] [.323]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [+0.494][-.669] [.323]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [+2.028][-.315] [.323]
 
-o<pocket_circ> call [+5.513][-.50] [0.51] [#<zt>][#<zb>]
+#<_z_top> = #<zt>
+#<_z_bot> = #<zb>
+o<pocket_circ> call [0] [+5.513][-.50] [0.51]
 
 o<end_round> call [0] [+5.513][-.50] [0.52] [#<zt>][#<zb>]
 

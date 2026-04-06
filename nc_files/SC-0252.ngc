@@ -2,7 +2,6 @@
 
 
 #<_z_clearance> = 0.2
-#<_td> = [3/16]
 #<_rampang> = 8
 
 #<x> = 1.05
@@ -30,7 +29,7 @@ G0 Z#<_z_clearance>
 ; outline
 
 F12
-G10 L1 P1 R[#<_td>/2]  ; Set tool 1 diameter
+G10 L1 P1 R[#5410/2]  ; Set tool 1 diameter
 
 G0 X1.25 Y0.25
 G41 D1

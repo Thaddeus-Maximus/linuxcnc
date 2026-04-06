@@ -1,6 +1,5 @@
 #<_z_clearance> = 0.5
 #<_rampang>     = 10
-#<_td>  = [5/8]
 ;#<_stepover>  = 0.1
 
 ;#<_overlap> = 0
@@ -17,13 +16,15 @@ G54  ; absolute coordinates
 
 F5
 
-o<drill> call [5][-0.625] [0.1][-0.3]
-o<drill> call [3][-0.625] [0.1][-0.3]
-o<drill> call [1][-0.625] [0.1][-0.3]
-o<drill> call [-1][-0.625] [0.1][-0.3]
-o<drill> call [-3][-0.625] [0.1][-0.3]
-o<drill> call [-5][-0.625] [0.1][-0.3]
-o<drill> call [-7][-0.625] [0.1][-0.3]
-o<drill> call [-9][-0.625] [0.1][-0.3]
+#<_z_top> = 0.1
+#<_z_bot> = -0.3
+o<drill> call [5][-0.625]
+o<drill> call [3][-0.625]
+o<drill> call [1][-0.625]
+o<drill> call [-1][-0.625]
+o<drill> call [-3][-0.625]
+o<drill> call [-5][-0.625]
+o<drill> call [-7][-0.625]
+o<drill> call [-9][-0.625]
 
 M2 ; end program

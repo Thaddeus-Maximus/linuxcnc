@@ -16,8 +16,12 @@ G54  ; absolute coordinates
 
 M03
 F20
-o<drill> call [+1][0] [-1][-2]
-o<drill> call [-1][0] [-1][-2]
+#<_z_top> = -1
+#<_z_bot> = -2
+o<drill> call [+1][0]
+#<_z_top> = -1
+#<_z_bot> = -2
+o<drill> call [-1][0]
 
 M05
 

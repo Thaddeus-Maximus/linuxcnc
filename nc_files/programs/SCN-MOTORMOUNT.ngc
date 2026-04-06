@@ -16,19 +16,33 @@ G54  ; absolute coordinates
 #<phase> = 2
 
 o10 if [#<phase> EQ 1]
-	#<_td> = .26
 	F5
-	o<drill> call [0.500][-.50] [#<zt>][#<zb>]
-	o<drill> call [0.500][-3.0] [#<zt>][#<zb>]
-	o<drill> call [5.125][-3.0] [#<zt>][#<zb>]
-	o<drill> call [5.125][-.50] [#<zt>][#<zb>]
+	#<_z_top> = #<zt>
+	#<_z_bot> = #<zb>
+	o<drill> call [0.500][-.50]
+	#<_z_top> = #<zt>
+	#<_z_bot> = #<zb>
+	o<drill> call [0.500][-3.0]
+	#<_z_top> = #<zt>
+	#<_z_bot> = #<zb>
+	o<drill> call [5.125][-3.0]
+	#<_z_top> = #<zt>
+	#<_z_bot> = #<zb>
+	o<drill> call [5.125][-.50]
 
-	o<drill> call [7.375][-0.500] [#<zt>][#<zb>]
-	o<drill> call [9.625][-0.500] [#<zt>][#<zb>]
-	o<drill> call [9.625][-2.156] [#<zt>][#<zb>]
-	o<drill> call [7.375][-2.156] [#<zt>][#<zb>]
+	#<_z_top> = #<zt>
+	#<_z_bot> = #<zb>
+	o<drill> call [7.375][-0.500]
+	#<_z_top> = #<zt>
+	#<_z_bot> = #<zb>
+	o<drill> call [9.625][-0.500]
+	#<_z_top> = #<zt>
+	#<_z_bot> = #<zb>
+	o<drill> call [9.625][-2.156]
+	#<_z_top> = #<zt>
+	#<_z_bot> = #<zb>
+	o<drill> call [7.375][-2.156]
 o10 elseif [#<phase> EQ 2]
-	#<_td> = .375
 	F8
 
 	o<end_angle> call [2] [10] [0][-3.5] [0] [#<zt>][#<zb>]

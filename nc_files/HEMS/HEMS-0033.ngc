@@ -15,10 +15,18 @@ M06  ; manual toolchange
 G54  ; absolute coordinates
 F4   ; mm/min (300 mm/min = about 1 ft/min)
 
-o<drill> call [5-3][-1] [.1][-.7] [.2]
-o<drill> call [8-3][-1] [.1][-.7] [.2]
-o<drill> call [5-3][-3] [.1][-.7] [.2]
-o<drill> call [8-3][-3] [.1][-.7] [.2]
+#<_z_top> = .1
+#<_z_bot> = -.7
+o<drill> call [5-3][-1] [.2]
+#<_z_top> = .1
+#<_z_bot> = -.7
+o<drill> call [8-3][-1] [.2]
+#<_z_top> = .1
+#<_z_bot> = -.7
+o<drill> call [5-3][-3] [.2]
+#<_z_top> = .1
+#<_z_bot> = -.7
+o<drill> call [8-3][-3] [.2]
 
 M30
 M2 ; end program

@@ -1,0 +1,138 @@
+; frame_rect - cuts along the perimeter of a rectangle (inside or outside).
+; Supports optional corner radii.
+; Requires globals: #<_z_top>, #<_z_bot>
+; Requires tool loaded (uses #5410 for diameter)
+; Optional global:  #<_z_clearance>
+o<frame_rect> sub
+	; o<frame_rect> call [mode] [x1][y1] [x2][y2] [radius]
+	; #1=mode #2=x1 #3=y1 #4=x2 #5=y2 #6=radius
+
+	#<M_CONVENTIONAL> = [FIX[#1/1] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#1/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#1/1] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#1/8] MOD 2 EQ 0]
+
+	G90
+	G91.1
+	M101
+	G17
+
+	#<td> = #5410
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #<_z_top>
+	o1 endif
+
+	#<minx> = #2
+	#<maxx> = #4
+	o3 if [#4 LT #2]
+		#<minx> = #4
+		#<maxx> = #2
+	o3 endif
+	#<miny> = #3
+	#<maxy> = #5
+	o4 if [#5 LT #3]
+		#<miny> = #5
+		#<maxy> = #3
+	o4 endif
+
+	G0 Z#<z_clearance>
+
+	o10 if [#<M_INSIDE> AND #<M_CONVENTIONAL>]
+		G0 X[[#2+#4]/2] Y[[#3+#5]/2]
+		G0 Z#<_z_top>
+		G1 Z#<_z_bot>
+		G1 X[#<maxx>-#<tr>]
+		o102 if [#6 GT #<tr>]
+			G1 Y[#<miny>+#6]
+			G2 X[#<maxx>-#6] Y[#<miny>+#<tr>] J0 I[-#6+#<tr>]
+			G1 X[#<minx>+#6]
+			G2 Y[#<miny>+#6] X[#<minx>+#<tr>] I0 J[+#6-#<tr>]
+			G1 Y[#<maxy>-#6]
+			G2 X[#<minx>+#6] Y[#<maxy>-#<tr>] J0 I[+#6-#<tr>]
+			G1 X[#<maxx>-#6]
+			G2 Y[#<maxy>-#6] X[#<maxx>-#<tr>] I0 J[-#6+#<tr>]
+		o102 else
+			G1 Y[#<miny>+#<tr>]
+			G1 X[#<minx>-#<tr>]
+			G1 Y[#<maxy>-#<tr>]
+			G1 X[#<maxx>-#<tr>]
+			G1 Y[#<miny>+#<tr>]
+		o102 endif
+		G1 Y[[#3+#5]/2]
+		G0 X[[#2+#4]/2] Y[[#3+#5]/2]
+		G0 Z#<_z_top>
+
+	o10 elseif [#<M_INSIDE> AND #<M_CLIMB>]
+		G0 X[[#2+#4]/2] Y[[#3+#5]/2]
+		G0 Z#<_z_top>
+		G1 Z#<_z_bot>
+		G1 X[#<maxx>-#<tr>]
+		o101 if [#6 GT #<tr>]
+			G1 Y[#<maxy>-#6]
+			G3 X[#<maxx>-#6] Y[#<maxy>-#<tr>] J0 I[-#6+#<tr>]
+			G1 X[#<minx>+#6]
+			G3 Y[#<maxy>-#6] X[#<minx>+#<tr>] I0 J[-#6+#<tr>]
+			G1 Y[#<miny>+#6]
+			G3 X[#<minx>+#6] Y[#<miny>+#<tr>] J0 I[+#6-#<tr>]
+			G1 X[#<maxx>-#6]
+			G3 Y[#<miny>+#6] X[#<maxx>-#<tr>] I0 J[+#6-#<tr>]
+		o101 else
+			G1 Y[#<maxy>-#<tr>]
+			G1 X[#<minx>+#<tr>]
+			G1 Y[#<miny>+#<tr>]
+			G1 X[#<maxx>-#<tr>]
+			G1 Y[#<maxy>-#<tr>]
+		o101 endif
+		G1 Y[[#3+#5]/2]
+		G0 X[[#2+#4]/2] Y[[#3+#5]/2]
+		G0 Z#<_z_top>
+
+	o10 elseif [#<M_OUTSIDE> AND #<M_CONVENTIONAL>]
+		G0 X[#<minx>-#<tr>] Y[#<maxy>+#<tr>]
+		G0 Z#<_z_top>
+		G1 Z#<_z_bot>
+		o104 if [#6 GT 0]
+			G1 Y[#<miny>+#6]
+			G3 X[#<minx>+#6] Y[#<miny>-#<tr>] J0 I[+#6+#<tr>]
+			G1 X[#<maxx>-#6]
+			G3 Y[#<miny>+#6] X[#<maxx>+#<tr>] I0 J[+#6+#<tr>]
+			G1 Y[#<maxy>-#6]
+			G3 X[#<maxx>-#6] Y[#<maxy>+#<tr>] J0 I[-#6-#<tr>]
+			G1 X[#<minx>+#6]
+			G3 Y[#<maxy>-#6] X[#<minx>-#<tr>] I0 J[-#6-#<tr>]
+		o104 else
+			G1 Y[#<miny>-#<tr>]
+			G1 X[#<maxx>+#<tr>]
+			G1 Y[#<maxy>+#<tr>]
+			G1 X[#<minx>-#<tr>]
+		o104 endif
+		G0 Z#<_z_top>
+
+	o10 elseif [#<M_OUTSIDE> AND #<M_CLIMB>]
+		G0 X[#<minx>-#<tr>] Y[#<miny>-#<tr>]
+		G0 Z#<_z_top>
+		G1 Z#<_z_bot>
+		o103 if [#6 GT 0]
+			G1 Y[#<maxy>-#6]
+			G2 X[#<minx>+#6] Y[#<maxy>+#<tr>] J0 I[+#6+#<tr>]
+			G1 X[#<maxx>-#6]
+			G2 Y[#<maxy>-#6] X[#<maxx>+#<tr>] I0 J[-#6-#<tr>]
+			G1 Y[#<miny>+#6]
+			G2 X[#<maxx>-#6] Y[#<miny>-#<tr>] J0 I[-#6-#<tr>]
+			G1 X[#<minx>+#6]
+			G2 Y[#<miny>+#6] X[#<minx>-#<tr>] I0 J[+#6+#<tr>]
+		o103 else
+			G1 Y[#<maxy>+#<tr>]
+			G1 X[#<maxx>+#<tr>]
+			G1 Y[#<miny>-#<tr>]
+			G1 X[#<minx>-#<tr>]
+		o103 endif
+		G0 Z#<_z_top>
+	o10 endif
+
+o<frame_rect> endsub
+
+M2

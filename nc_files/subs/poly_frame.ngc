@@ -1,0 +1,63 @@
+; poly_frame - perimeter cut of a regular polygon.
+; apothem = flat-to-flat distance / 2 (center to midpoint of edge).
+; rotation in degrees: 0 places first vertex on +X axis, CCW positive.
+; Requires globals: #<_z_top>, #<_z_bot>
+; Requires tool loaded (uses #5410 for diameter)
+; Optional global:  #<_z_clearance>
+o<poly_frame> sub
+	; o<poly_frame> call [mode] [x][y] [n_sides] [apothem] [rotation] [fincut]
+	; #1=mode #2=x #3=y #4=n_sides #5=apothem #6=rotation #7=fincut
+
+	#<M_CONVENTIONAL> = [FIX[#1/1] MOD 2 EQ 1]
+	#<M_OUTSIDE>      = [FIX[#1/8] MOD 2 EQ 1]
+	#<M_CLIMB>        = [FIX[#1/1] MOD 2 EQ 0]
+	#<M_INSIDE>       = [FIX[#1/8] MOD 2 EQ 0]
+
+	G90
+	G90.1
+	M101
+	G17
+
+	#<td> = #5410
+	#<tr> = [#<td>/2]
+	o1 if [EXISTS[#<_z_clearance>]]
+		#<z_clearance> = #<_z_clearance>
+	o1 else
+		#<z_clearance> = #<_z_top>
+	o1 endif
+
+	o10 if [#<M_INSIDE>]
+		#<effective_apothem> = [#5 - #<tr> - #7]
+	o10 else
+		#<effective_apothem> = [#5 + #<tr> + #7]
+	o10 endif
+
+	#<R> = [#<effective_apothem> / COS[180/#4]]
+	#<step_angle> = [360/#4]
+
+	o11 if [[#<M_INSIDE> AND #<M_CLIMB>] OR [#<M_OUTSIDE> AND #<M_CONVENTIONAL>]]
+		#<dir> = 1
+	o11 else
+		#<dir> = -1
+	o11 endif
+
+	G0 Z#<z_clearance>
+
+	#<x0> = [#2 + #<R>*COS[#6]]
+	#<y0> = [#3 + #<R>*SIN[#6]]
+	G0 X#<x0> Y#<y0>
+	G0 Z#<_z_top>
+	G1 Z#<_z_bot>
+
+	#<i> = 1
+	o20 while [#<i> LE #4]
+		#<ang> = [#6 + #<dir>*#<i>*#<step_angle>]
+		G1 X[#2 + #<R>*COS[#<ang>]] Y[#3 + #<R>*SIN[#<ang>]]
+		#<i> = [#<i> + 1]
+	o20 endwhile
+
+	G0 Z#<z_clearance>
+
+o<poly_frame> endsub
+
+M2

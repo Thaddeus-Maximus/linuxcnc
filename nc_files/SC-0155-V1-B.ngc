@@ -12,10 +12,11 @@ M03
 F5.0
 
 #<z> = -0.14
-#<_td> = [3/32]
 #<_z_clearance> = 0.02
 
-;o<pocket_circ> call [0][0] [0.62] [#<_z_clearance>][#<z>] [0] [0+4]
+;#<_z_top> = #<_z_clearance>
+;#<_z_bot> = #<z>
+;o<pocket_circ> call [0+4] [0][0] [0.62] [0]
 
 G91.1 ; incremental IJK
 
