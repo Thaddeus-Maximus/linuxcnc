@@ -13,7 +13,8 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:forum.linuxcnc.org)",
-      "WebFetch(domain:www.forum.linuxcnc.org)"
+      "WebFetch(domain:www.forum.linuxcnc.org)",
+      "Bash(file:*)"
     ]
   }
 }
