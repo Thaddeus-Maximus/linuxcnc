@@ -1,0 +1,18 @@
+#<_z_clearance> = 0.500
+
+M03 ; Start spindle
+F10 ; Feed
+
+#<_z_top> = 0.25
+#<_z_bot> = 0.0
+
+#<d> = 0.5
+o<frame_circ> call [+4] [1.25][-4.025] [#<d>]
+o<frame_circ> call [+4] [4.00][-4.025] [#<d>]
+o<frame_circ> call [+4] [4.00][-1.805] [#<d>]
+
+o<frame_rect> call [+4+8] [-.175][.175] [5.425][-4.425]
+
+M05 ; Stop Spindle
+M30 ; End Program
+%
