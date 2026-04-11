@@ -4,8 +4,8 @@
 ; Requires tool loaded (uses #5410 for diameter)
 ; Optional global:  #<_z_clearance>
 o<frame_rect> sub
-	; o<frame_rect> call [mode] [x1][y1] [x2][y2] [radius]
-	; #1=mode #2=x1 #3=y1 #4=x2 #5=y2 #6=radius
+	(o<frame_rect> call [mode] [x1][y1] [x2][y2] [radius])
+	(#1=mode #2=x1 #3=y1 #4=x2 #5=y2 #6=radius)
 
 	#<M_CONVENTIONAL> = [FIX[#1/1] MOD 2 EQ 1]
 	#<M_OUTSIDE>      = [FIX[#1/8] MOD 2 EQ 1]
