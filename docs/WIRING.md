@@ -6,7 +6,6 @@ This is how I have my LinuxCNC machine wired. I put a linuxCNC box in place of a
 | 6i24-16   | FPGA card (PCIe host interface) |
 | 7i52S     | Servo interface daughter card   |
 | 7i37TA    | Isolated I/O daughter card      |
-|           |                                 |
 
 ![[pc_front.jpg]]
 ![[cbox_back.jpg]]
