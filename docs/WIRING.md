@@ -18,24 +18,24 @@ This is how I have my LinuxCNC machine wired. I put a linuxCNC box in place of a
 
 The encoders for both motors and the standard TRAK encoders use the same Amphenol CPC connector.
 
-The encoders are differential 5V output. They might have an index pulse but I wasn't using it. The Z axis has the same pinout.
+The encoders are differential 5V output. They might have an index pulse but I wasn't using it. The Z axis has the same pinout. Peak-peak voltage is 2.7V.
 
-| Pin | Signal | Color (in PC) |
-| --- | ------ | ------------- |
-| 1   | B-     | White         |
-| 2   | 5V     | Red           |
-| 3   | B+     | Blue          |
-| 4   | N/C    |               |
-| 5   | N/C    |               |
-| 6   | N/C    |               |
-| 7   | N/C    |               |
-| 8   | N/C    |               |
-| 9   | GND    | Black         |
-| 10  | GND    | Black         |
-| 11  | GND    | Black         |
-| 12  | A-     | Yellow        |
-| 13  | GND    | Black         |
-| 14  | A+     | Green         |
+| Pin | Signal   | Color (in PC) |
+| --- | -------- | ------------- |
+| 1   | B-       | White         |
+| 2   | 5V       | Red           |
+| 3   | B+       | Blue          |
+| 4   | N/C      |               |
+| 5   | N/C      |               |
+| 6   | N/C      |               |
+| 7   | N/C      |               |
+| 8   | N/C      |               |
+| 9   | GND/SHLD | Black         |
+| 10  | GND/SHLD | Black         |
+| 11  | GND/SHLD | Black         |
+| 12  | A-       | Yellow        |
+| 13  | GND      | Black         |
+| 14  | A+       | Green         |
 
 ![](ampconns.jpg)
 
@@ -170,19 +170,12 @@ A custom `M101` and `M102` g code enables/disables the z-axis.
 - `output-type 1` (PWM + Direction pins)
 - `offset-mode 1` → locked anti-phase / bipolar single-signal: duty cycle directly encodes signed command
 - `scale = OUTPUT_SCALE`: X = +1, Y = -1, Z = -1 (sign flips drive polarity to match wiring)
-- Duty cycle = `(value/scale + 1) / 2`
+- peak-peak voltage of 3.3V from the TRAK CNC II control
 
-| Commanded value | Duty cycle | Meaning      |
-| --------------- | ---------- | ------------ |
-| -1.0            | 0 %        | full reverse |
-| -0.5            | 25 %       | half reverse |
-| 0.0             | **50 %**   | stop         |
-| +0.5            | 75 %       | half forward |
-| +1.0            | 100 %      | full forward |
 
 When the enable line is deasserted the pwmgen output is forced off (not 50%), so the amp sees a distinct disabled state vs. "commanded zero". You can hear the drives hum/whine at the 50% state.
 
-**WARNING: ENABLING THE DRIVE WITH THE PWM DISCONNECTED WILL SHOW AS A 0% DUTY CYCLE - CAUSING THE DRIVE TO RUN FULL REVERSE!**
+My notes say that setting duty cycle to 0 or 100% cause the drive to disable. I'm not sure if this is the case or not. I don't know exactly what the functional band of the PWM is.
 
 ### Enable
 
