@@ -1,3 +1,4 @@
+# HEPHAESTUS Wiring
 
 This is how I have my LinuxCNC machine wired. I put a linuxCNC box in place of a Southwestern Industries TRAK CNC II control box. I am reusing the TRAK drives, motors, and encoders. Eventually, I switched to using linear encoders instead of the TRAK encoders.
 
@@ -10,6 +11,8 @@ This is how I have my LinuxCNC machine wired. I put a linuxCNC box in place of a
 ![](pc_front.jpg)
 ![](cbox_back.jpg)
 ![](cbox_inside.jpg)
+
+# Encoders
 
 ## TRAK Encoder Pinout
 
@@ -33,7 +36,9 @@ The encoders are differential 5V output. They might have an index pulse but I wa
 | 12  | A-     | Yellow        |
 | 13  | GND    | Black         |
 | 14  | A+     | Green         |
+
 ![](ampconns.jpg)
+
 ## Linear Encoder Pinout (DB9)
 
 I switched to some linear encoders that have a D-sub connector. They are also 5V differential output, and nearly the same resolution, resulting in very easy switchover.
@@ -53,7 +58,7 @@ I switched to some linear encoders that have a D-sub connector. They are also 5V
 
 ## DB37 Pinout
 
-The DB37 cable contains drive signals and motor encoder signals.
+The DB37 cable contains drive signals and motor encoder signals and connects to the TRAK drive box.
 
 *This pinout was determined by probing. I'm not sure what some of the pins do; some of the ??? pins might actually be an index pulse or something.*
 
@@ -91,6 +96,7 @@ The DB37 cable contains drive signals and motor encoder signals.
 # MESA Cards
 
 ![](mesa_cards.jpg)
+
 ## 7i37TA
 
 Three enables are used - one for the X and Y axes, one for the z axis, and one for the spindle. This allows the z axis to be disabled independently for manual drilling operations.
