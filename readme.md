@@ -1,5 +1,7 @@
 # Lagun Mill - LinuxCNC
 
+For wiring - see [docs/WIRING.md](docs/WIRING.md).
+
 ## Docs
 
 - [nc_files/MACROS.md](nc_files/MACROS.md) — macro subroutine reference (drill, pocket, frame, slot, bore, polygon)
