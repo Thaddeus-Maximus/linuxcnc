@@ -55,7 +55,7 @@ I switched to some linear encoders that have a D-sub connector. They are also 5V
 
 The DB37 cable contains drive signals and motor encoder signals.
 
-*This pinout was determined by probing. I'm not sure what some of the pins do; some of the pins labelled GND or 5V might actually be an index pulse or something.*
+*This pinout was determined by probing. I'm not sure what some of the pins do; some of the ??? pins might actually be an index pulse or something.*
 
 
 | Pin   | Signal     | Notes     |
@@ -174,7 +174,9 @@ A custom `M101` and `M102` g code enables/disables the z-axis.
 | +0.5            | 75 %       | half forward |
 | +1.0            | 100 %      | full forward |
 
-When the enable line is deasserted the pwmgen output is forced off (not 50%), so the amp sees a distinct disabled state vs. "commanded zero".
+When the enable line is deasserted the pwmgen output is forced off (not 50%), so the amp sees a distinct disabled state vs. "commanded zero". You can hear the drives hum/whine at the 50% state.
+
+**WARNING: ENABLING THE DRIVE WITH THE PWM DISCONNECTED WILL SHOW AS A 0% DUTY CYCLE - CAUSING THE DRIVE TO RUN FULL REVERSE!**
 
 ### Enable
 
