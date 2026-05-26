@@ -7,9 +7,9 @@ This is how I have my LinuxCNC machine wired. I put a linuxCNC box in place of a
 | 7i52S     | Servo interface daughter card   |
 | 7i37TA    | Isolated I/O daughter card      |
 
-![[pc_front.jpg]]
-![[cbox_back.jpg]]
-![[cbox_inside.jpg]]
+![](pc_front.jpg)
+![](cbox_back.jpg)
+![](cbox_inside.jpg)
 
 ## TRAK Encoder Pinout
 
@@ -33,7 +33,7 @@ The encoders are differential 5V output. They might have an index pulse but I wa
 | 12  | A-     | Yellow        |
 | 13  | GND    | Black         |
 | 14  | A+     | Green         |
-![[ampconns.jpg]]
+![](ampconns.jpg)
 ## Linear Encoder Pinout (DB9)
 
 I switched to some linear encoders that have a D-sub connector. They are also 5V differential output, and nearly the same resolution, resulting in very easy switchover.
@@ -90,7 +90,7 @@ The DB37 cable contains drive signals and motor encoder signals.
 
 # MESA Cards
 
-![[mesa_cards.jpg]]
+![](mesa_cards.jpg)
 ## 7i37TA
 
 Three enables are used - one for the X and Y axes, one for the z axis, and one for the spindle. This allows the z axis to be disabled independently for manual drilling operations.
@@ -187,4 +187,4 @@ Enable lines are switched by 7i37TA isolated MOSFET outputs (`OBITn+`/`OBITn-`).
 
 Fail-safe: cable cut, 5 V loss, or hm2 unconfigured all leave the MOSFET off → contact open → drive disabled.
 
-![[cbox_bottom.jpg]]
+![](cbox_bottom.jpg)
